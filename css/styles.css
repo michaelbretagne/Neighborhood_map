@@ -1,0 +1,19 @@
+body, html {
+  height: 100%;
+  width: 100%;
+}
+
+ul {
+    padding: 0 5%;
+}
+
+li {
+    list-style: none;
+}
+
+#map {
+    position: relative;
+    width: 90%;
+    height: 80vh;
+    margin: auto;
+}
