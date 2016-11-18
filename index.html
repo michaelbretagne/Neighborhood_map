@@ -20,12 +20,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">The City's playground</a>
+                <a class="navbar-brand" href="#">The City's park</a>
             </div>
             <div class="collapse navbar-collapse">
                 <form class="navbar-form navbar-right">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
+                        <input type="text" class="form-control" placeholder="Search park in the city">
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
@@ -38,7 +38,7 @@
                 <div class="col-md-4">
                     <div class="list-group">
                         <ul class="list-park" data-bind="foreach: parkList">
-                            <li class="park" data-bind="text: name"></li>
+                            <li class="park" data-bind="text: name, click: $parent.placeInfoBox"></li>
                         </ul>
                     </div>
                 </div>
@@ -50,29 +50,8 @@
     </div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
-    <script>
-        function initMap() {
-            var myLatLng = {
-                lat: 37.77,
-                lng: -122.44
-            };
-
-            // Create a map object and specify the DOM element for display.
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: myLatLng,
-                scrollwheel: false,
-                zoom: 12
-            });
-
-            //            // Create a marker and set its position.
-            //            var marker = new google.maps.Marker({
-            //                map: map,
-            //                position: myLatLng,
-            //                title: 'Hello World!'
-            //            });
-        }
-    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAATegb_vfnrK5i8ovNBjf9htL88PNMA00&callback=initMap" async defer></script>
+    <script type="text/javascript" src="js/map.js"></script>
 </body>
 
 </html>
