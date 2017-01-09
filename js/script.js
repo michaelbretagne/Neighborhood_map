@@ -3,6 +3,8 @@ function app() {
     // Declare variables
     var map, marker;
     var infowindow = new google.maps.InfoWindow();
+    var previousInfoWindow = false;
+    var nameArr = [];
 
     // Model
     // Create the object "placeObj" with a method "makerMethod" to create his marker and his info windows
@@ -12,23 +14,37 @@ function app() {
             this.street = street,
             this.city = city,
             this.latitude = latitude,
-            this.longitude = longitude
+            this.longitude = longitude;
+            // Insert the name of the park in a array for later use in the search filter
+            nameArr.push(name);
         }
 
+
+
         markerMethod() {
+            //Create a new marker
             marker = new google.maps.Marker({
                     position: new google.maps.LatLng(this.latitude, this.longitude),
                     map: map,
                     animation: google.maps.Animation.DROP
                   });
 
-                  // Callback function to show info windows on click
-                  google.maps.event.addListener(marker, 'click', (function(marker) {
-                    return function() {
-                      infowindow.setContent(this.name);
-                      infowindow.open(map, marker);
-                    };
-                  })(marker));
+                // Create a new info window
+                var infowindow = new google.maps.InfoWindow({
+                    content: this.name
+                });
+
+                // Open the info window when the marker is clicked
+                google.maps.event.addListener(marker, 'click', function() {
+
+                    // Close the last opened info window if there is one open
+                    closeInfoWindow();
+                    // Open the info window on the marker
+                    infowindow.open(map, this);
+                    // Declare that a info window is open
+                    previousInfoWindow = infowindow;
+                });
+            return marker;
             }
         }
 
@@ -70,32 +86,48 @@ function app() {
 
     function location(data) {
         this.name = ko.observable(data.name);
-        this.latitude = ko.observable(data.latitude);
-        this.longitude = ko.observable(data.longitude);
+        this.marker = data.markerMethod();
+
     }
 
     function ViewModel() {
         console.log("ViewModel");
         var self = this;
 
+        // Observable array of the list of Park
         this.parkList = ko.observableArray([]);
 
-        places.forEach(function(place) {
-            self.parkList.push(new location(place));
+        // Create the list of parks in the HTML DOM
+        places.forEach(function(data) {
+            self.parkList.push(new location(data));
         });
 
+        // Open info window when a marker is clicked from the HTML DOM list
         this.placeInfoBox = function(clickedPark) {
+            // Close the last opened info window if there is one open
+            closeInfoWindow();
+            // Open the info window and set content on the marker
             infowindow.setContent(clickedPark.name());
-            infowindow.open(map, marker);
-            console.log(clickedPark);
+            infowindow.open(map, clickedPark.marker);
+            // Declare that a info window is open
+            previousInfoWindow = infowindow;
         };
     }
 
     // View
+    // Function that display all the markers
     function displayAllMarkers() {
         createMarker(places);
     }
 
+    // Close info window if one is already open
+    function closeInfoWindow() {
+        if( previousInfoWindow) {
+            previousInfoWindow.close();
+        }
+    }
+
+    // Function that starts the application
     function startApp() {
        initMap();
        ko.applyBindings(new ViewModel());
