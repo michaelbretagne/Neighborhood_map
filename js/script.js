@@ -4,7 +4,7 @@ function app() {
     var map, marker;
     var infowindow = new google.maps.InfoWindow();
     var previousInfoWindow = false;
-    var nameArr = [];
+
 
     // Model
     // Create the object "placeObj" with a method "makerMethod" to create his marker and his info windows
@@ -15,11 +15,9 @@ function app() {
             this.city = city,
             this.latitude = latitude,
             this.longitude = longitude;
-            // Insert the name of the park in a array for later use in the search filter
-            nameArr.push(name);
+            // Where the marker is stored when it is created
+            this.pin = "";
         }
-
-
 
         markerMethod() {
             //Create a new marker
@@ -28,6 +26,8 @@ function app() {
                     map: map,
                     animation: google.maps.Animation.DROP
                   });
+
+                this.pin = marker;
 
                 // Create a new info window
                 var infowindow = new google.maps.InfoWindow({
@@ -44,11 +44,10 @@ function app() {
                     // Declare that a info window is open
                     previousInfoWindow = infowindow;
                 });
-            return marker;
             }
         }
 
-    // Array of all the places
+    // Array containing all the parks informations
     var places = [new placeObj("Huntington Park", "California St & Cushman St",
                                "San Francisco", 37.792173, -122.412157),
                   new placeObj("Lafayette Park", "Gough St and Sacremento St",
@@ -73,53 +72,50 @@ function app() {
             scrollwheel: true,
             zoom: 12
         });
-
-        // Display all the marker during initialization
-        displayAllMarkers();
     }
 
     // View Model
-    // Function that create the markers
-    function createMarker(data) {
-        data.forEach(el => el.markerMethod());
-    }
-
-    function location(data) {
-        this.name = ko.observable(data.name);
-        this.marker = data.markerMethod();
-
-    }
-
     function ViewModel() {
         console.log("ViewModel");
         var self = this;
 
-        // Observable array of the list of Park
-        this.parkList = ko.observableArray([]);
+        // Observable of the array places
+        self.places = ko.observableArray([]);
+        self.places(places);
 
-        // Create the list of parks in the HTML DOM
-        places.forEach(function(data) {
-            self.parkList.push(new location(data));
-        });
+        // Observable of the query from the search bar
+        self.query = ko.observable("");
 
-        // Open info window when a marker is clicked from the HTML DOM list
+        // Computed observable to filter the parks
+        self.filteredData = ko.computed(function() {
+            var filter = self.query().toLowerCase();
+            var data = self.places();
+
+            // If no filter, render all the places
+            if (!filter) {
+                data.forEach(el => el.markerMethod());
+                return self.places();
+            // If filter, render the places matching the inputed letter
+            } else {
+              return ko.utils.arrayFilter(self.places(), function(item) {
+                return item.name.toLowerCase().indexOf(filter) !== -1;
+              });
+            }
+          });
+
+        //Open info window when a marker is clicked from the HTML DOM list
         this.placeInfoBox = function(clickedPark) {
-            // Close the last opened info window if there is one open
-            closeInfoWindow();
-            // Open the info window and set content on the marker
-            infowindow.setContent(clickedPark.name());
-            infowindow.open(map, clickedPark.marker);
-            // Declare that a info window is open
-            previousInfoWindow = infowindow;
+        // Close the last opened info window if there is one open
+        closeInfoWindow();
+        // Open the info window and set content on the marker
+        infowindow.setContent(clickedPark.name);
+        infowindow.open(map, clickedPark.pin);
+        // Declare that a info window is open
+        previousInfoWindow = infowindow;
         };
     }
 
-    // View
-    // Function that display all the markers
-    function displayAllMarkers() {
-        createMarker(places);
-    }
-
+    // // View
     // Close info window if one is already open
     function closeInfoWindow() {
         if( previousInfoWindow) {
