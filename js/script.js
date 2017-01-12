@@ -1,13 +1,13 @@
 function app() {
 
     // Declare variables
-    var map, marker;
+    var map, marker, rating;
     var infowindow = new google.maps.InfoWindow();
     var previousInfoWindow = false;
 
-
     // Model
-    // Create the object "placeObj" with a method "makerMethod" to create his marker and his info windows
+    // Object for the places with a method "makerMethod" which create a marker and an info windows
+    // and also a method "deleteMarker" which delete the marker.
     class placeObj {
         constructor(name, street, city, latitude, longitude) {
             this.name = name,
@@ -16,7 +16,7 @@ function app() {
             this.latitude = latitude,
             this.longitude = longitude;
             // Where the marker is stored when it is created
-            this.pin = "";
+            this.marker = "";
         }
 
         markerMethod() {
@@ -25,9 +25,9 @@ function app() {
                     position: new google.maps.LatLng(this.latitude, this.longitude),
                     map: map,
                     animation: google.maps.Animation.DROP
-                  });
+                    });
 
-                this.pin = marker;
+                this.marker = marker;
 
                 // Create a new info window
                 var infowindow = new google.maps.InfoWindow({
@@ -44,6 +44,63 @@ function app() {
                     // Declare that a info window is open
                     previousInfoWindow = infowindow;
                 });
+            }
+
+            // Delete the marker
+            deleteMarker() {
+                this.marker.setMap(null);
+            }
+
+            yelpInfo() {
+                // Uses OAuth 1.0a signature generator
+                // Bower package installed at https://github.com/bettiolo/oauth-signature-js
+
+                // Use the GET method for the request
+                var httpMethod = 'GET';
+
+                // Yelp API request url
+                var yelpURL = 'http://api.yelp.com/v2/search/';
+
+                // Return a nonce
+                var nonce = function() {
+                    return (Math.floor(Math.random() * 1e12).toString());
+                };
+
+                // Set parameters for the authentication and the search
+                var parameters = {
+                  oauth_consumer_key: 'DgdYz5Ok9hKgaDDC0_-LRQ',
+                  oauth_token: 'PWjDu-crzWrIEN7b2kQ3ly-em5-H5g3x',
+                  oauth_nonce: nonce(),
+                  oauth_timestamp: Math.floor(Date.now() / 1000),
+                  oauth_signature_method: 'HMAC-SHA1',
+                  oauth_version: '1.0',
+                  callback: 'cb',
+                  term: this.name,
+                  location: 'San Francisco, CA',
+                  limit: 1
+                };
+
+                // Generate the OAuth signature
+                var EncodedSignature = oauthSignature.generate(httpMethod, yelpURL, parameters, 'vP92U9WyYFBwbOnCN_bkL9d1T3M', '4ZSzDmfHZF7fjFG-6uom9-rCZqs');
+
+                // Add signature to list of parameters
+                parameters.oauth_signature = EncodedSignature;
+
+                // Set up the ajax settings
+                var ajaxSettings = {
+                  url: yelpURL,
+                  data: parameters,
+                  cache: true,
+                  dataType: 'jsonp',
+                  success: function(response) {
+                    console.log(response);
+                  },
+                  error: function() {
+                    console.log("fail response");
+                  }
+                };
+                // Send off the ajaz request to Yelp
+                $.ajax(ajaxSettings);
             }
         }
 
@@ -94,11 +151,16 @@ function app() {
             // If no filter, render all the places
             if (!filter) {
                 data.forEach(el => el.markerMethod());
+                data.forEach(el => el.yelpInfo());
                 return self.places();
             // If filter, render the places matching the inputed letter
             } else {
               return ko.utils.arrayFilter(self.places(), function(item) {
-                return item.name.toLowerCase().indexOf(filter) !== -1;
+                var bool = item.name.toLowerCase().indexOf(filter) !== -1;
+                if (bool === false) {
+                    item.deleteMarker();
+                }
+                return bool;
               });
             }
           });
@@ -109,7 +171,7 @@ function app() {
         closeInfoWindow();
         // Open the info window and set content on the marker
         infowindow.setContent(clickedPark.name);
-        infowindow.open(map, clickedPark.pin);
+        infowindow.open(map, clickedPark.marker);
         // Declare that a info window is open
         previousInfoWindow = infowindow;
         };
