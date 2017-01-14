@@ -4,7 +4,7 @@ function app() {
     var map, marker, rating;
     var infowindow = new google.maps.InfoWindow();
     var previousInfoWindow = false;
-    var location = "San francsico"
+    var location = "San francsico";
     var coordinate = []; // Latitude and longitude of the map center by default
     var binding = false;
     var places = [];
@@ -15,12 +15,16 @@ function app() {
     // Object for the places with a method "makerMethod" which create a marker and an info windows
     // and also a method "deleteMarker" which delete the marker.
     class placeObj {
-        constructor(name, street, city, latitude, longitude) {
+        constructor(name, street, city, latitude, longitude, url, rating, ratingImg, reviewNum) {
             this.name = name,
             this.street = street,
             this.city = city,
             this.latitude = latitude,
             this.longitude = longitude;
+            this.url = url;
+            this.rating = rating;
+            this.ratingImg = ratingImg;
+            this.reviewNum = reviewNum;
             // Where the marker is stored when it is created
             this.marker = "";
         }
@@ -73,7 +77,8 @@ function app() {
 
     // View Model
 
-    function ViewModel() {;
+    function ViewModel() {
+        console.log("viewModel");
         var self = this;
 
         // Observable of the array places
@@ -87,11 +92,11 @@ function app() {
         self.filteredData = ko.computed(function() {
             var filter = self.query().toLowerCase();
             var data = self.places();
-            // console.log(data);
 
             // If no filter, render all the places
             if (!filter) {
                 data.forEach(el => el.markerMethod());
+                console.log(self.places());
                 return self.places();
             // If filter, render the places matching the inputed letter
             } else {
@@ -109,8 +114,10 @@ function app() {
         this.placeInfoBox = function(clickedPark) {
         // Close the last opened info window if there is one open
         closeInfoWindow();
+        // Format content
+        var formattedContent = `${clickedPark.name} <br> ${clickedPark.street} <br> ${clickedPark.city}`
         // Open the info window and set content on the marker
-        infowindow.setContent(clickedPark.name);
+        infowindow.setContent(formattedContent);
         infowindow.open(map, clickedPark.marker);
         // Declare that a info window is open
         previousInfoWindow = infowindow;
@@ -145,7 +152,7 @@ function app() {
           callback: 'cb',
           term: 'park',
           location: location,
-          limit: 10
+          limit: 5
         };
 
         // Generate the OAuth signature
@@ -169,23 +176,26 @@ function app() {
                     var city = yelpData[i].location.city;
                     var lat = yelpData[i].location.coordinate.latitude;
                     var long = yelpData[i].location.coordinate.longitude;
+                    var url = yelpData[i].url;
+                    var rating =yelpData[i].rating;
+                    var ratingImg = yelpData[i].rating_img_url_small;
+                    var reviewNum =yelpData[i].review_count;
                     coordinate = [lat, long];
                     displayNewLocation(coordinate[0], coordinate[1]);
-                    places.push(new placeObj(parkName, street, city, lat, long));
-                };
+                    places.push(new placeObj(parkName, street, city, lat, long, url, rating, ratingImg, reviewNum));
+                }
             },
             error: function() {
                 places = backUpPlaces;
                 displayNewLocation(37.77, -122.44);
-                console.log(places);
                 }
         };
 
-        // If ko.applyBinding has already been called, it will update the viewModel
+        // If ko.applyBinding has already been called, it will only update the viewModel
         if (binding === true) {
-            setTimeout(function(){ ViewModel(); }, 1000);
+            setTimeout(function(){ ViewModel(); }, 1500);
         } else {
-            setTimeout(function(){ ko.applyBindings(new ViewModel()); }, 1000);
+            setTimeout(function(){ ko.applyBindings(new ViewModel()); }, 1500);
             binding = true;
     }
 
@@ -200,8 +210,10 @@ function app() {
     function setupEventListener() {
         document.querySelector('#newLocation').addEventListener('keypress', function(event) {
              if (event.keycode === 13 || event.which === 13) {
+                event.preventDefault();
                 location = this.value;
-                places = [];
+                places.splice(0, 9);
+                console.log(places);
                 yelpInfo();
              }
          });
