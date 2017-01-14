@@ -5,9 +5,13 @@ function app() {
     var infowindow = new google.maps.InfoWindow();
     var previousInfoWindow = false;
     var location = "San francsico"
-    var coordinate = [37.77, -122.44]; // Map location by default
+    var coordinate = []; // Latitude and longitude of the map center by default
+    var binding = false;
+    var places = [];
+
 
     // Model
+
     // Object for the places with a method "makerMethod" which create a marker and an info windows
     // and also a method "deleteMarker" which delete the marker.
     class placeObj {
@@ -28,7 +32,7 @@ function app() {
                     map: map,
                     animation: google.maps.Animation.DROP
                     });
-
+                // Store marker
                 this.marker = marker;
 
                 // Create a new info window
@@ -52,35 +56,25 @@ function app() {
             deleteMarker() {
                 this.marker.setMap(null);
             }
-
-
         }
 
-    // Array containing all the parks informations
-     var places = [];
-    //              [new placeObj("Huntington Park", "California St & Cushman St",
-    //                            "San Francisco", 37.792173, -122.412157),
-    //               new placeObj("Lafayette Park", "Gough St and Sacremento St",
-    //                            "San Francisco", 37.791629, -122.427536),
-    //               new placeObj("Washington Square Park", "Union St and Stockton St",
-    //                            "San Francisco", 37.800798, -122.410096),
-    //               new placeObj("Alamo Square Park", "Hayes St and Steiner St",
-    //                            "San Francisco", 37.776344, -122.434595),
-    //               new placeObj("Alta Plaza Park", "Jackson St & Steiner St",
-    //                            "San Francisco", 37.791202, -122.437657)];
+    // Array containing parks informations if the request from Yelp API fail
+    var backUpPlaces = [new placeObj("Huntington Park", "California St & Cushman St",
+                                    "San Francisco", 37.792173, -122.412157),
+                        new placeObj("Lafayette Park", "Gough St and Sacremento St",
+                                    "San Francisco", 37.791629, -122.427536),
+                        new placeObj("Washington Square Park", "Union St and Stockton St",
+                                    "San Francisco", 37.800798, -122.410096),
+                        new placeObj("Alamo Square Park", "Hayes St and Steiner St",
+                                    "San Francisco", 37.776344, -122.434595),
+                        new placeObj("Alta Plaza Park", "Jackson St & Steiner St",
+                                    "San Francisco", 37.791202, -122.437657)];
 
-    // Init function
-    function initMap() {
-        console.log("map");
-        yelpInfo();
-    }
 
     // View Model
-    function ViewModel() {
-        console.log("ViewModel");
-        var self = this;
 
-        // var viewModel = ko.mapping.fromJS(data);
+    function ViewModel() {;
+        var self = this;
 
         // Observable of the array places
         self.places = ko.observableArray([]);
@@ -123,6 +117,8 @@ function app() {
         };
     }
 
+
+    // Get data from yelp API
     function yelpInfo() {
         // Uses OAuth 1.0a signature generator
         // Bower package installed at https://github.com/bettiolo/oauth-signature-js
@@ -160,39 +156,48 @@ function app() {
 
         // Set up the ajax settings
         var ajaxSettings = {
-          url: yelpURL,
-          data: parameters,
-          cache: true,
-          dataType: 'jsonp',
-          success: function(response) {
-            // console.log(response);
-            var yelpData = response.businesses;
-            console.log(yelpData);
-            for (i = 0; i < yelpData.length; i++) {
-                var parkName = yelpData[i].name;
-                var street = yelpData[i].location.address[0];
-                var city = yelpData[i].location.city;
-                var lat = yelpData[i].location.coordinate.latitude;
-                var long = yelpData[i].location.coordinate.longitude;
-                coordinate = [lat, long];
-                displayNewLocation(coordinate[0], coordinate[1]);
-                places.push(new placeObj(parkName, street, city, lat, long));
-                places[0].markerMethod();
-            };
-            // ko.mapping.fromJS(data, viewModel);
-            ko.applyBindings(new ViewModel());
+            url: yelpURL,
+            data: parameters,
+            cache: true,
+            dataType: 'jsonp',
+            success: function(response) {
+                var yelpData = response.businesses;
+                console.log(yelpData);
+                for (i = 0; i < yelpData.length; i++) {
+                    var parkName = yelpData[i].name;
+                    var street = yelpData[i].location.address[0];
+                    var city = yelpData[i].location.city;
+                    var lat = yelpData[i].location.coordinate.latitude;
+                    var long = yelpData[i].location.coordinate.longitude;
+                    coordinate = [lat, long];
+                    displayNewLocation(coordinate[0], coordinate[1]);
+                    places.push(new placeObj(parkName, street, city, lat, long));
+                };
             },
-          error: function() {
-            console.log("fail response");
-            }
+            error: function() {
+                places = backUpPlaces;
+                displayNewLocation(37.77, -122.44);
+                console.log(places);
+                }
         };
-        // Send off the ajaz request to Yelp
+
+        // If ko.applyBinding has already been called, it will update the viewModel
+        if (binding === true) {
+            setTimeout(function(){ ViewModel(); }, 1000);
+        } else {
+            setTimeout(function(){ ko.applyBindings(new ViewModel()); }, 1000);
+            binding = true;
+    }
+
+        // Send off the ajax request to Yelp
         $.ajax(ajaxSettings);
     }
 
-    // View
-    function setupEventListener() {
 
+    // View
+
+    // Get the new location requested from users
+    function setupEventListener() {
         document.querySelector('#newLocation').addEventListener('keypress', function(event) {
              if (event.keycode === 13 || event.which === 13) {
                 location = this.value;
@@ -202,6 +207,7 @@ function app() {
          });
     }
 
+    // Display the new map when users enter a new location
     function displayNewLocation(lat, long) {
         var mapCenter = new google.maps.LatLng(lat, long);
 
@@ -222,9 +228,8 @@ function app() {
 
     // Function that starts the application
     function startApp() {
-       initMap();
+       yelpInfo();
        setupEventListener();
-       // ko.applyBindings(new ViewModel());
     }
 
     // Start application
