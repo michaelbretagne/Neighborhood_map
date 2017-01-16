@@ -16,10 +16,10 @@ function app() {
     // and also a method "deleteMarker" which delete the marker.
     class placeObj {
         constructor(name, street, city, latitude, longitude, url, rating, ratingImg, reviewNum) {
-            this.name = name,
-            this.street = street,
-            this.city = city,
-            this.latitude = latitude,
+            this.name = name;
+            this.street = street;
+            this.city = city;
+            this.latitude = latitude;
             this.longitude = longitude;
             this.url = url;
             this.rating = rating;
@@ -41,7 +41,9 @@ function app() {
 
                 // Create a new info window
                 var infowindow = new google.maps.InfoWindow({
-                    content: this.name
+                    content: `<div class="iw-title">${this.name}</div>
+                              <div class="iw-address">${this.street}</div>
+                              <div class="iw-address">${this.city}</div>`
                 });
 
                 // Open the info window when the marker is clicked
@@ -81,9 +83,18 @@ function app() {
         console.log("viewModel");
         var self = this;
 
+        // New location input observable
+        self.input = ko.observable();
+        // Set the new location and fetch data from yelp
+        self.newLocation = function() {
+            location = self.input();
+            places.splice(0, 9);
+            yelpInfo();
+
+        };
+
         // Observable of the array places
-        self.places = ko.observableArray([]);
-        self.places(places);
+        self.places = ko.observableArray(places);
 
         // Observable of the query from the search bar
         self.query = ko.observable("");
@@ -91,22 +102,18 @@ function app() {
         // Computed observable to filter the parks
         self.filteredData = ko.computed(function() {
             var filter = self.query().toLowerCase();
-            var data = self.places();
 
-            // If no filter, render all the places
             if (!filter) {
-                data.forEach(el => el.markerMethod());
-                console.log(self.places());
+                self.places().forEach(el => el.markerMethod());
                 return self.places();
-            // If filter, render the places matching the inputed letter
             } else {
-              return ko.utils.arrayFilter(self.places(), function(item) {
+                return ko.utils.arrayFilter(self.places(), function(item) {
                 var bool = item.name.toLowerCase().indexOf(filter) !== -1;
                 if (bool === false) {
                     item.deleteMarker();
                 }
                 return bool;
-              });
+              }, self);
             }
           });
 
@@ -115,7 +122,9 @@ function app() {
         // Close the last opened info window if there is one open
         closeInfoWindow();
         // Format content
-        var formattedContent = `${clickedPark.name} <br> ${clickedPark.street} <br> ${clickedPark.city}`
+        var formattedContent = `<div class="iw-title">${clickedPark.name}</div>
+                                <div class="iw-address">${clickedPark.street}</div>
+                                <div class="iw-address">${clickedPark.city}</div>`;
         // Open the info window and set content on the marker
         infowindow.setContent(formattedContent);
         infowindow.open(map, clickedPark.marker);
@@ -169,7 +178,6 @@ function app() {
             dataType: 'jsonp',
             success: function(response) {
                 var yelpData = response.businesses;
-                console.log(yelpData);
                 for (i = 0; i < yelpData.length; i++) {
                     var parkName = yelpData[i].name;
                     var street = yelpData[i].location.address[0];
@@ -182,7 +190,7 @@ function app() {
                     var reviewNum =yelpData[i].review_count;
                     coordinate = [lat, long];
                     displayNewLocation(coordinate[0], coordinate[1]);
-                    places.push(new placeObj(parkName, street, city, lat, long, url, rating, ratingImg, reviewNum));
+                    ViewModel.places.push(new placeObj(parkName, street, city, lat, long, url, rating, ratingImg, reviewNum));
                 }
             },
             error: function() {
@@ -197,7 +205,7 @@ function app() {
         } else {
             setTimeout(function(){ ko.applyBindings(new ViewModel()); }, 1500);
             binding = true;
-    }
+        }
 
         // Send off the ajax request to Yelp
         $.ajax(ajaxSettings);
@@ -205,19 +213,6 @@ function app() {
 
 
     // View
-
-    // Get the new location requested from users
-    function setupEventListener() {
-        document.querySelector('#newLocation').addEventListener('keypress', function(event) {
-             if (event.keycode === 13 || event.which === 13) {
-                event.preventDefault();
-                location = this.value;
-                places.splice(0, 9);
-                console.log(places);
-                yelpInfo();
-             }
-         });
-    }
 
     // Display the new map when users enter a new location
     function displayNewLocation(lat, long) {
@@ -241,7 +236,7 @@ function app() {
     // Function that starts the application
     function startApp() {
        yelpInfo();
-       setupEventListener();
+       //setupEventListener();
     }
 
     // Start application
