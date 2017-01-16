@@ -24,9 +24,9 @@
                     <a class="navbar-brand" href="#">Park finder</a>
                 </div>
                 <div class="collapse navbar-collapse">
-                    <form class="navbar-form navbar-right">
+                    <form class="navbar-form navbar-right" data-bind="submit: newLocation">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="newLocation" placeholder="Location, ex: Oakland">
+                          <input type="text" class="form-control" id="newLocation" placeholder="Location, ex: Oakland" value="" data-bind="value: input">
                         </div>
                         <button type="submit" class="btn btn-default">Submit</button>
                     </form>
