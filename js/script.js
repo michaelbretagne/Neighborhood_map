@@ -26,7 +26,7 @@ function app() {
             this.ratingImg = ratingImg;
             this.reviewNum = reviewNum;
             // Where the marker is stored when it is created
-            this.marker = "";
+            this.marker = [];
         }
 
         markerMethod() {
@@ -38,7 +38,7 @@ function app() {
                     });
                 // Store marker
                 this.marker = marker;
-
+                // console.log(this.marker);
                 // Create a new info window
                 var infowindow = new google.maps.InfoWindow({
                     content: `<div class="iw-title">${this.name}</div>
@@ -80,7 +80,6 @@ function app() {
     // View Model
 
     function ViewModel() {
-        console.log("viewModel");
         var self = this;
 
         // New location input observable
@@ -90,27 +89,36 @@ function app() {
             location = self.input();
             places.splice(0, 9);
             yelpInfo();
+
         };
 
         // Observable of the array places
         self.placesList = ko.observableArray(places);
+
+        // The self refer to window when I change location! Not sure why and how to fix that!
+        console.log(self);
+
+        // Create a marker for each places
+        self.placesList().forEach(el => el.markerMethod());
 
         // Observable of the query from the search bar
         self.query = ko.observable("");
 
         // Computed observable to filter the parks
         self.filteredData = ko.computed(function() {
-
             var filter = self.query().toLowerCase();
 
             if (!filter) {
-                self.placesList().forEach(el => el.markerMethod());
+                console.log(self);
+                // If the filter is not activate all markers are visible
+                self.placesList().forEach(el => el.marker.setVisible(true));
                 return self.placesList();
             } else {
                 return ko.utils.arrayFilter(self.placesList(), function(item) {
                 var bool = item.name.toLowerCase().indexOf(filter) !== -1;
                 if (bool === false) {
-                    item.deleteMarker();
+                    // Only marker matching filter input of the park name will be visible
+                    item.marker.setVisible(false);
                 }
                 return bool;
               });
