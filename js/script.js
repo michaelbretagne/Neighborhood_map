@@ -90,32 +90,32 @@ function app() {
             location = self.input();
             places.splice(0, 9);
             yelpInfo();
-
         };
 
         // Observable of the array places
-        self.places = ko.observableArray(places);
+        self.placesList = ko.observableArray(places);
 
         // Observable of the query from the search bar
         self.query = ko.observable("");
 
         // Computed observable to filter the parks
         self.filteredData = ko.computed(function() {
+
             var filter = self.query().toLowerCase();
 
             if (!filter) {
-                self.places().forEach(el => el.markerMethod());
-                return self.places();
+                self.placesList().forEach(el => el.markerMethod());
+                return self.placesList();
             } else {
-                return ko.utils.arrayFilter(self.places(), function(item) {
+                return ko.utils.arrayFilter(self.placesList(), function(item) {
                 var bool = item.name.toLowerCase().indexOf(filter) !== -1;
                 if (bool === false) {
                     item.deleteMarker();
                 }
                 return bool;
-              }, self);
+              });
             }
-          });
+          }, self);
 
         //Open info window when a marker is clicked from the HTML DOM list
         this.placeInfoBox = function(clickedPark) {
@@ -190,7 +190,7 @@ function app() {
                     var reviewNum =yelpData[i].review_count;
                     coordinate = [lat, long];
                     displayNewLocation(coordinate[0], coordinate[1]);
-                    ViewModel.places.push(new placeObj(parkName, street, city, lat, long, url, rating, ratingImg, reviewNum));
+                    places.push(new placeObj(parkName, street, city, lat, long, url, rating, ratingImg, reviewNum));
                 }
             },
             error: function() {
@@ -242,5 +242,3 @@ function app() {
     // Start application
     startApp();
 }
-
-
