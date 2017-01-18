@@ -57,11 +57,6 @@ function app() {
                     previousInfoWindow = infowindow;
                 });
             }
-
-            // Delete the marker
-            deleteMarker() {
-                this.marker.setMap(null);
-            }
         }
 
     // Array containing parks informations if the request from Yelp API fail
@@ -92,14 +87,14 @@ function app() {
 
         };
 
+        // Observable of the list who get the filtered list from ko.computed
+        self.placesList = ko.observableArray([]);
+        console.log(self.placesList());
         // Observable of the array places
-        self.placesList = ko.observableArray(places);
-
-        // The self refer to window when I change location! Not sure why and how to fix that!
-        console.log(self);
+        self.placesArr = ko.observableArray(places);
 
         // Create a marker for each places
-        self.placesList().forEach(el => el.markerMethod());
+        self.placesArr().forEach(el => el.markerMethod());
 
         // Observable of the query from the search bar
         self.query = ko.observable("");
@@ -108,22 +103,17 @@ function app() {
         self.filteredData = ko.computed(function() {
             var filter = self.query().toLowerCase();
 
-            if (!filter) {
-                console.log(self);
-                // If the filter is not activate all markers are visible
-                self.placesList().forEach(el => el.marker.setVisible(true));
-                return self.placesList();
-            } else {
-                return ko.utils.arrayFilter(self.placesList(), function(item) {
-                var bool = item.name.toLowerCase().indexOf(filter) !== -1;
-                if (bool === false) {
-                    // Only marker matching filter input of the park name will be visible
-                    item.marker.setVisible(false);
+            self.placesList.removeAll();
+
+            self.placesArr().forEach(function(element) {
+                element.marker.setVisible(false);
+
+                if (element.name.toLowerCase().indexOf(filter) !== -1) {
+                    element.marker.setVisible(true);
+                    self.placesList.push(element);
                 }
-                return bool;
-              });
-            }
-          }, self);
+            });
+          });
 
         //Open info window when a marker is clicked from the HTML DOM list
         this.placeInfoBox = function(clickedPark) {
@@ -185,20 +175,26 @@ function app() {
             cache: true,
             dataType: 'jsonp',
             success: function(response) {
+
+                // Set the center of the map
+                var latMap = response.region.center.latitude;
+                var longMap = response.region.center.longitude;
+                displayNewLocation(latMap, longMap);
+
+                // Populate the placeObj with the relevant data
                 var yelpData = response.businesses;
                 for (i = 0; i < yelpData.length; i++) {
                     var parkName = yelpData[i].name;
                     var street = yelpData[i].location.address[0];
                     var city = yelpData[i].location.city;
-                    var lat = yelpData[i].location.coordinate.latitude;
-                    var long = yelpData[i].location.coordinate.longitude;
+                    var markerLat = yelpData[i].location.coordinate.latitude;
+                    var markerLong = yelpData[i].location.coordinate.longitude;
                     var url = yelpData[i].url;
                     var rating =yelpData[i].rating;
                     var ratingImg = yelpData[i].rating_img_url_small;
                     var reviewNum =yelpData[i].review_count;
-                    coordinate = [lat, long];
-                    displayNewLocation(coordinate[0], coordinate[1]);
-                    places.push(new placeObj(parkName, street, city, lat, long, url, rating, ratingImg, reviewNum));
+
+                    places.push(new placeObj(parkName, street, city, markerLat, markerLong, url, rating, ratingImg, reviewNum));
                 }
             },
             error: function() {
@@ -206,14 +202,8 @@ function app() {
                 displayNewLocation(37.77, -122.44);
                 }
         };
-
-        // If ko.applyBinding has already been called, it will only update the viewModel
-        if (binding === true) {
-            setTimeout(function(){ ViewModel(); }, 1500);
-        } else {
-            setTimeout(function(){ ko.applyBindings(new ViewModel()); }, 1500);
-            binding = true;
-        }
+        // Update View model after getting all the data from Yelp API
+        setTimeout(function(){ ViewModel(); }, 1500);
 
         // Send off the ajax request to Yelp
         $.ajax(ajaxSettings);
@@ -243,8 +233,8 @@ function app() {
 
     // Function that starts the application
     function startApp() {
-       yelpInfo();
-       //setupEventListener();
+        ko.applyBindings(new ViewModel());
+        yelpInfo();
     }
 
     // Start application
