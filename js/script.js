@@ -89,7 +89,7 @@ function app() {
 
         // Observable of the list who get the filtered list from ko.computed
         self.placesList = ko.observableArray([]);
-        console.log(self.placesList());
+
         // Observable of the array places
         self.placesArr = ko.observableArray(places);
 
@@ -113,7 +113,7 @@ function app() {
                     self.placesList.push(element);
                 }
             });
-          });
+          }, self);
 
         //Open info window when a marker is clicked from the HTML DOM list
         this.placeInfoBox = function(clickedPark) {
@@ -130,7 +130,6 @@ function app() {
         previousInfoWindow = infowindow;
         };
     }
-
 
     // Get data from yelp API
     function yelpInfo() {
@@ -175,7 +174,6 @@ function app() {
             cache: true,
             dataType: 'jsonp',
             success: function(response) {
-
                 // Set the center of the map
                 var latMap = response.region.center.latitude;
                 var longMap = response.region.center.longitude;
@@ -193,7 +191,7 @@ function app() {
                     var rating =yelpData[i].rating;
                     var ratingImg = yelpData[i].rating_img_url_small;
                     var reviewNum =yelpData[i].review_count;
-
+                    // ViewModel.placesList.push(new placeObj(parkName, street, city, markerLat, markerLong, url, rating, ratingImg, reviewNum));
                     places.push(new placeObj(parkName, street, city, markerLat, markerLong, url, rating, ratingImg, reviewNum));
                 }
             },
