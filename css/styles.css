@@ -24,6 +24,9 @@ body, html {
   left: 20px;
 }
 
+a:hover {
+    text-decoration: none;
+}
 
 li {
     list-style: none;
@@ -33,12 +36,34 @@ ul {
     padding: 0;
 }
 
-.form-control {
-    margin: 0px 0px -5px 4px;
-    width: 97%;
+/*----------------------------------------Inputs / Buttons------------------------------*/
+
+input[type="checkbox"] {
+    position: relative;   
 }
 
-/*----------------------------------------Filtered Park List*------------------------------*/
+input[type="text"] {
+    padding-left: 5px;
+}
+
+.input-group {
+    padding: 0px;
+    margin: 0px 0px 5px 0px;
+    width: 98%;
+}
+
+.search-input {
+    padding: 0px;
+    margin: 1px 0px -5px 4px;
+    width: 97%;
+    }
+
+.input-group-addon:last-child {
+    width: 35px;
+}
+
+
+/*----------------------------------------Filtered Park List------------------------------*/
 
 #list-park {
     height: 550px;
@@ -57,24 +82,12 @@ ul {
     background-color: #f8f8f8;
 }
 
-.ion-plus-circled {
+.park-details {
     position: relative;
-    font-size: 180%;
-    margin-left: -10px;
+    margin: 0px 25px;
+    padding: 15px 6px;
+    border-radius: 5px;
 }
-
-.ion-minus-circled {
-    position: relative;
-    font-size: 180%;
-    margin-left: -10px;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-input[type="checkbox"] {
-    position: relative;
-}
-
-
 
 /*----------------------------------------Goolge Info windows*---------------------------------*/
 
