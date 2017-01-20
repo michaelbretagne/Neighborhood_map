@@ -1,17 +1,19 @@
 function app() {
 
     // Declare variables
+    var vm
+    var location = "San francsico";
     var map, marker, rating;
     var infowindow = new google.maps.InfoWindow();
     var previousInfoWindow = false;
-    var location = "San francsico";
+
 
     // Model
-
     // Object for the places with a method "markerMethod" which create a marker and an info windows
     // and also a method "deleteMarker" which delete the marker.
     class placeObj {
-        constructor(name, street, city, latitude, longitude, url, rating, ratingImg, reviewNum) {
+        constructor(name, street, city, latitude, longitude, url, rating,
+                    ratingImg, reviewNum, image, text) {
             this.name = name;
             this.street = street;
             this.city = city;
@@ -21,6 +23,8 @@ function app() {
             this.rating = rating;
             this.ratingImg = ratingImg;
             this.reviewNum = reviewNum;
+            this.image = image;
+            this.text = text;
 
             //Create a new marker
             this.marker = new google.maps.Marker({
@@ -30,7 +34,7 @@ function app() {
                     });
 
             // Create a new info window
-            infowindow = new google.maps.InfoWindow({
+            var infowindowMarker = new google.maps.InfoWindow({
                 content: `<div class="iw-title">${this.name}</div>
                           <div class="iw-address">${this.street}</div>
                           <div class="iw-address">${this.city}</div>`
@@ -39,12 +43,23 @@ function app() {
             // Open the info window when the marker is clicked
             google.maps.event.addListener(this.marker, 'click', function() {
 
+                // Bounce marker
+              //   if (this.getAnimation() !== null) {
+              //   this.setAnimation(null);
+              // } else {
+              //   this.setAnimation(google.maps.Animation.BOUNCE);
+              // }
+
+                // Center the map around the clicked marker
+                // map.setCenter(this.getPosition());
                 // Close the last opened info window if there is one open
                 closeInfoWindow();
                 // Open the info window on the marker
-                infowindow.open(map, this);
+                infowindowMarker.open(map, this);
                 // Declare that a info window is open
-                previousInfoWindow = infowindow;
+                previousInfoWindow = infowindowMarker;
+
+                vm.displayDetails(false);
             });
         }
     }
@@ -72,13 +87,13 @@ function app() {
         // Set the new location and fetch data from yelp
         self.newLocation = function() {
             location = self.input();
+            self.displayDetails(false);
             self.placesList([]);
             yelpInfo(location);
         };
 
         // Observable of the list who get the filtered list from ko.computed
         self.placesList = ko.observableArray([]);
-        console.log(self.placesList());
 
         // Observable of the query from the search bar
         self.query = ko.observable("");
@@ -105,19 +120,36 @@ function app() {
               }
           });
 
+        // Display/hide the parks list box
+        self.displayList = ko.observable(true);
+        // Display/hide the details of a selected park
+        self.displayDetails = ko.observable(false);
+        // Parks's details observable
+        self.text = ko.observable();
+        self.image = ko.observable();
+        self.url = ko.observable();
+
         // Open info window when a marker is clicked from the HTML DOM list
         self.placeInfoBox = function(clickedPark) {
-        // Close the last opened info window if there is one open
-        closeInfoWindow();
-        // Format content
-        var formattedContent = `<div class="iw-title">${clickedPark.name}</div>
-                                <div class="iw-address">${clickedPark.street}</div>
-                                <div class="iw-address">${clickedPark.city}</div>`;
-        // Open the info window and set content on the marker
-        infowindow.setContent(formattedContent);
-        infowindow.open(map, clickedPark.marker);
-        // Declare that a info window is open
-        previousInfoWindow = infowindow;
+            // Close the last opened info window if there is one open
+            closeInfoWindow();
+            // Format content
+            var formattedContent = `<div class="iw-title">${clickedPark.name}</div>
+                                    <div class="iw-address">${clickedPark.street}</div>
+                                    <div class="iw-address">${clickedPark.city}</div>`;
+            // Open the info window and set content on the marker
+            infowindow.setContent(formattedContent);
+            infowindow.open(map, clickedPark.marker);
+            // Declare that a info window is open
+            previousInfoWindow = infowindow;
+            // Center map on marker click
+            map.setCenter(clickedPark.marker.getPosition());
+            // Pass data into observable
+            self.text(clickedPark.text);
+            self.image(clickedPark.image);
+            self.url(clickedPark.url);
+            // Display the details
+            self.displayDetails(true);
         };
 
         // Get data from yelp API
@@ -151,7 +183,9 @@ function app() {
             };
 
             // Generate the OAuth signature
-            var EncodedSignature = oauthSignature.generate(httpMethod, yelpURL, parameters, 'vP92U9WyYFBwbOnCN_bkL9d1T3M', '4ZSzDmfHZF7fjFG-6uom9-rCZqs');
+            var EncodedSignature = oauthSignature.generate(httpMethod, yelpURL,
+                parameters, 'vP92U9WyYFBwbOnCN_bkL9d1T3M',
+                '4ZSzDmfHZF7fjFG-6uom9-rCZqs');
 
             // Add signature to list of parameters
             parameters.oauth_signature = EncodedSignature;
@@ -180,8 +214,12 @@ function app() {
                         var rating =yelpData[i].rating;
                         var ratingImg = yelpData[i].rating_img_url_small;
                         var reviewNum =yelpData[i].review_count;
+                        var image = yelpData[i].snippet_image_url
+                        var text = yelpData[i].snippet_text
 
-                        self.placesList.push(new placeObj(parkName, street, city, markerLat, markerLong, url, rating, ratingImg, reviewNum));
+                        self.placesList.push(new placeObj(parkName, street,
+                            city, markerLat, markerLong, url, rating,
+                            ratingImg, reviewNum, image, text));
                     }
                 },
                 error: function() {
@@ -233,12 +271,12 @@ function app() {
             },
             zoomControl: true,
             zoomControlOptions: {
-                position: google.maps.ControlPosition.RIGHT_CENTER
+                position: google.maps.ControlPosition.RIGHT_BOTTOM
             },
             scaleControl: true,
             streetViewControl: true,
             streetViewControlOptions: {
-                position: google.maps.ControlPosition.RIGHT_CENTER
+                position: google.maps.ControlPosition.RIGHT_BOTTOM
             }
         });
     }
@@ -250,9 +288,15 @@ function app() {
         }
     }
 
+    function closeDetails() {
+        console.log(ViewModel.displayDetails);
+    }
+
     // Function that starts the application
     function startApp() {
-        ko.applyBindings(new ViewModel());
+        // Create a new viewModel
+        vm = new ViewModel();
+        ko.applyBindings(vm);
     }
 
     // Start application
