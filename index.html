@@ -21,7 +21,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Park finder</a>
+                    <a href="www.michaeldonal.com" class="navbar-brand"><span data-bind="text: title"></span></a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <form class="navbar-form navbar-right" data-bind="submit: newLocation">
@@ -36,11 +36,17 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3 pull-left">
-                    <div class="list-group" data-bind="visible: displayList">
-                        <div class="input-group">
-                            <input type="text" id="search" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area"><span class="input-group-addon glyphicon glyphicon-search"></span>
+                    <div class="list-group text-center" data-bind="visible: displayList">
+                        <div class="search ">
+                           <span class="fa fa-search"></span>
+                            <input type="text" id="search" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
                         </div>
-                        <ul id="list-park" data-bind="foreach: filteredData">
+                        <div class="btn-filter">
+                            <button type="submit" class="btn btn-default" data-bind="click: parkTerm">Parks</button>
+                            <button type="submit" class="btn btn-default" data-bind="click: playgroundTerm">Playgrounds</button>
+                            <button type="submit" class="btn btn-default" data-bind="click: hikingTerm">Hikes</button>
+                        </div>
+                        <ul class="scrollbar" id="list-park" data-bind="foreach: filteredData">
                             <li class="park" data-bind=" click: $parent.placeInfoBox">
                                 <h4><span data-bind="text: name"></span></h4>
                                 <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
@@ -51,12 +57,15 @@
                         </ul>
                     </div>
                 </div>
+<!--
                 <div class="btn-close">
                     <input type="checkbox" data-bind="checked: displayList">
                 </div>
+-->
                 <div class="col-md-3 pull-right text-center" data-bind="visible: displayDetails">
                     <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">
                         <div class="park-details park">
+                            <h4><span data-bind="text: park"></span></h4>
                             <p class="text"><span data-bind="text: text"></span></p>
                             <img class="image" data-bind="attr: { src: image }">
                         </div>
@@ -70,6 +79,7 @@
             app();
         }
     </script>
+    <script src="https://use.fontawesome.com/b9afe1fb3a.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
     <script src="bower_components/oauth-signature/dist/oauth-signature.js"></script>
