@@ -3,6 +3,7 @@ function app() {
     // Declare variables
     var vm
     var location = "San francsico";
+    var term = "parks";
     var map, marker, rating;
     var infowindow = new google.maps.InfoWindow();
     var previousInfoWindow = false;
@@ -82,6 +83,13 @@ function app() {
 
         yelpInfo(location);
 
+        // Title observabables
+        self.city = ko.observable();
+        self.terms = ko.observable();
+        self.title = ko.computed(function() {
+             return `Top 10 ${self.terms()} in ${self.city()}`;
+         })
+
         // New location input observable
         self.input = ko.observable();
         // Set the new location and fetch data from yelp
@@ -89,7 +97,28 @@ function app() {
             location = self.input();
             self.displayDetails(false);
             self.placesList([]);
-            yelpInfo(location);
+            yelpInfo();
+        };
+        // Call API for best parks
+        self.parkTerm = function() {
+            term = "parks";
+            self.displayDetails(false);
+            self.placesList([]);
+            yelpInfo();
+        };
+        // Call API for best playgrounds
+        self.playgroundTerm = function() {
+            term = "playgrounds";
+            self.displayDetails(false);
+            self.placesList([]);
+            yelpInfo();
+        };
+        // Call API for best hikes
+        self.hikingTerm = function() {
+            term = "hikes";
+            self.displayDetails(false);
+            self.placesList([]);
+            yelpInfo();
         };
 
         // Observable of the list who get the filtered list from ko.computed
@@ -125,6 +154,7 @@ function app() {
         // Display/hide the details of a selected park
         self.displayDetails = ko.observable(false);
         // Parks's details observable
+        self.park = ko.observable();
         self.text = ko.observable();
         self.image = ko.observable();
         self.url = ko.observable();
@@ -145,6 +175,7 @@ function app() {
             // Center map on marker click
             map.setCenter(clickedPark.marker.getPosition());
             // Pass data into observable
+            self.park(clickedPark.name)
             self.text(clickedPark.text);
             self.image(clickedPark.image);
             self.url(clickedPark.url);
@@ -177,9 +208,9 @@ function app() {
               oauth_signature_method: 'HMAC-SHA1',
               oauth_version: '1.0',
               callback: 'cb',
-              term: 'park',
+              term: term,
               location: location,
-              limit: 5
+              limit: 10
             };
 
             // Generate the OAuth signature
@@ -217,9 +248,14 @@ function app() {
                         var image = yelpData[i].snippet_image_url
                         var text = yelpData[i].snippet_text
 
+                        // Push the data into a observable array
                         self.placesList.push(new placeObj(parkName, street,
                             city, markerLat, markerLong, url, rating,
                             ratingImg, reviewNum, image, text));
+
+                        // Set data to a observable for the title computed observable
+                        self.city(city);
+                        self.terms(term);
                     }
                 },
                 error: function() {
@@ -261,7 +297,7 @@ function app() {
         map = new google.maps.Map(document.getElementById('map'), {
             center: mapCenter,
             scrollwheel: true,
-            zoom: 13,
+            zoom: 12,
             styles: styleArray,
 
             mapTypeControl: true,
@@ -286,10 +322,6 @@ function app() {
         if( previousInfoWindow) {
             previousInfoWindow.close();
         }
-    }
-
-    function closeDetails() {
-        console.log(ViewModel.displayDetails);
     }
 
     // Function that starts the application
