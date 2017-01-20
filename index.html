@@ -26,7 +26,7 @@
                 <div class="collapse navbar-collapse">
                     <form class="navbar-form navbar-right" data-bind="submit: newLocation">
                         <div class="form-group">
-                          <input type="text" class="form-control" id="newLocation" placeholder="Location, ex: Oakland" value="" data-bind="value: input">
+                            <input type="text" class="form-control" id="newLocation" placeholder="Location, ex: Oakland" value="" data-bind="value: input">
                         </div>
                         <button type="submit" class="btn btn-default" data-bind="click: newLocation">Submit</button>
                     </form>
@@ -37,8 +37,8 @@
             <div class="row">
                 <div class="col-md-3 pull-left">
                     <div class="list-group" data-bind="visible: displayList">
-                       <div class="form-group">
-                            <input type="text" id="search" class="form-control" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
+                        <div class="input-group">
+                            <input type="text" id="search" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area"><span class="input-group-addon glyphicon glyphicon-search"></span>
                         </div>
                         <ul id="list-park" data-bind="foreach: filteredData">
                             <li class="park" data-bind=" click: $parent.placeInfoBox">
@@ -53,6 +53,14 @@
                 </div>
                 <div class="btn-close">
                     <input type="checkbox" data-bind="checked: displayList">
+                </div>
+                <div class="col-md-3 pull-right text-center" data-bind="visible: displayDetails">
+                    <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">
+                        <div class="park-details park">
+                            <p class="text"><span data-bind="text: text"></span></p>
+                            <img class="image" data-bind="attr: { src: image }">
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
