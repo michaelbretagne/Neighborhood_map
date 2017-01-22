@@ -1,20 +1,30 @@
+// Start app if no error from Google API
+function googleSuccess() {
+            app();
+        }
+// Set a screenshot as a background with an error message
+function gm_authFailure() {
+    document.getElementById('background-error').style.display= 'block';
+}
+
+// Application starter
 function app() {
 
     // Declare variables
-    var vm
-    var location = "San francsico";
-    var term = "parks";
+    var vm;
+    var location = 'San francsico';
+    var term = 'parks';
     var map, marker, rating;
     var infowindow = new google.maps.InfoWindow();
     var previousInfoWindow = false;
 
 
     // Model
-    // Object for the places with a method "markerMethod" which create a marker and an info windows
-    // and also a method "deleteMarker" which delete the marker.
-    class placeObj {
-        constructor(name, street, city, latitude, longitude, url, rating,
-                    ratingImg, reviewNum, image, text) {
+    // Object of the place with marker and an info windows
+    class PlaceObj {
+        constructor(name='n/a', street='n/a', city='n/a', latitude='n/a',
+                    longitude='n/a', url='n/a', rating='n/a',
+                    ratingImg='n/a', reviewNum='n/a', image='n/a', text='n/a') {
             this.name = name;
             this.street = street;
             this.city = city;
@@ -36,9 +46,9 @@ function app() {
 
             // Create a new info window
             var infowindowMarker = new google.maps.InfoWindow({
-                content: `<div class="iw-title">${this.name}</div>
-                          <div class="iw-address">${this.street}</div>
-                          <div class="iw-address">${this.city}</div>`
+                content: `<div class='iw-title'>${this.name}</div>
+                          <div class='iw-address'>${this.street}</div>
+                          <div class='iw-address'>${this.city}</div>`
             });
 
             // Open the info window when the marker is clicked
@@ -51,8 +61,6 @@ function app() {
               //   this.setAnimation(google.maps.Animation.BOUNCE);
               // }
 
-                // Center the map around the clicked marker
-                // map.setCenter(this.getPosition());
                 // Close the last opened info window if there is one open
                 closeInfoWindow();
                 // Open the info window on the marker
@@ -64,18 +72,6 @@ function app() {
             });
         }
     }
-
-    // Array containing parks informations if the request from Yelp API fail
-    var backUpPlaces = [new placeObj("Huntington Park", "California St & Cushman St",
-                                    "San Francisco", 37.792173, -122.412157),
-                        new placeObj("Lafayette Park", "Gough St and Sacremento St",
-                                    "San Francisco", 37.791629, -122.427536),
-                        new placeObj("Washington Square Park", "Union St and Stockton St",
-                                    "San Francisco", 37.800798, -122.410096),
-                        new placeObj("Alamo Square Park", "Hayes St and Steiner St",
-                                    "San Francisco", 37.776344, -122.434595),
-                        new placeObj("Alta Plaza Park", "Jackson St & Steiner St",
-                                    "San Francisco", 37.791202, -122.437657)];
 
     // View Model
     function ViewModel() {
@@ -101,21 +97,21 @@ function app() {
         };
         // Call API for best parks
         self.parkTerm = function() {
-            term = "parks";
+            term = 'parks';
             self.displayDetails(false);
             self.placesList([]);
             yelpInfo();
         };
         // Call API for best playgrounds
         self.playgroundTerm = function() {
-            term = "playgrounds";
+            term = 'playgrounds';
             self.displayDetails(false);
             self.placesList([]);
             yelpInfo();
         };
         // Call API for best hikes
         self.hikingTerm = function() {
-            term = "hikes";
+            term = 'hikes';
             self.displayDetails(false);
             self.placesList([]);
             yelpInfo();
@@ -125,7 +121,7 @@ function app() {
         self.placesList = ko.observableArray([]);
 
         // Observable of the query from the search bar
-        self.query = ko.observable("");
+        self.query = ko.observable('');
 
         // Computed observable to filter the parks
         self.filteredData = ko.computed(function() {
@@ -164,9 +160,9 @@ function app() {
             // Close the last opened info window if there is one open
             closeInfoWindow();
             // Format content
-            var formattedContent = `<div class="iw-title">${clickedPark.name}</div>
-                                    <div class="iw-address">${clickedPark.street}</div>
-                                    <div class="iw-address">${clickedPark.city}</div>`;
+            var formattedContent = `<div class='iw-title'>${clickedPark.name}</div>
+                                    <div class='iw-address'>${clickedPark.street}</div>
+                                    <div class='iw-address'>${clickedPark.city}</div>`;
             // Open the info window and set content on the marker
             infowindow.setContent(formattedContent);
             infowindow.open(map, clickedPark.marker);
@@ -233,7 +229,7 @@ function app() {
                     var longMap = response.region.center.longitude;
                     displayNewLocation(latMap, longMap);
 
-                    // Populate the placeObj with the relevant data
+                    // Populate the PlaceObj with the relevant data
                     var yelpData = response.businesses;
                     for (i = 0; i < yelpData.length; i++) {
                         var parkName = yelpData[i].name;
@@ -249,7 +245,7 @@ function app() {
                         var text = yelpData[i].snippet_text
 
                         // Push the data into a observable array
-                        self.placesList.push(new placeObj(parkName, street,
+                        self.placesList.push(new PlaceObj(parkName, street,
                             city, markerLat, markerLong, url, rating,
                             ratingImg, reviewNum, image, text));
 
@@ -259,11 +255,8 @@ function app() {
                     }
                 },
                 error: function() {
-                    displayNewLocation(37.77, -122.44);
-                    // Display hard coded places
-                    for (i = 0; i < backUpPlaces.length; i++) {
-                        self.placesList.push(backUpPlaces[i]);
-                    }
+                    // Set a screenshot as a background with an error message
+                    document.getElementById('background-error').style.display= 'block';
                 }
             };
             // Send off the ajax request to Yelp
