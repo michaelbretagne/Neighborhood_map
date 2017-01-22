@@ -7,12 +7,17 @@ body, html {
     background-color: rgba(0,0,0,.7);
 }
 
+.navbar-collapse {
+    height: 280px;
+}
+
 #map {
     height: 100%;
     width: 100%;
-    left: 0;
-    position: absolute;
     top: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
 }
 
 .container {
@@ -48,7 +53,8 @@ ul {
 /*----------------------------------------Inputs / Buttons------------------------------*/
 
 input[type="checkbox"] {
-    position: relative;   
+    position: relative;
+    font-size: 15px;
 }
 
 .search {
@@ -105,7 +111,7 @@ input[type="checkbox"] {
 
 /*----------------------------------------Filtered Park List------------------------------*/
 
-#list-park {
+.list-park {
     height: 560px;
     overflow-y: scroll;
 }
@@ -143,3 +149,249 @@ input[type="checkbox"] {
 
 /*-------------------------------------------Media query----------------------------------------*/
 
+/*
+
+Extra extra small devices. WTH! iPhone 5!*/
+@media (max-width: 330px) {
+        
+    #map {
+        height: 115%;
+        margin-top: -165px;
+        top: auto;
+        z-index: 1;
+    }
+    
+    .navbar-inverse {
+        position: relative;
+        background-color: rgba(0,0,0,0.8);
+        z-index: 2;
+    }
+    
+    .navbar-collapse.in {
+       overflow-y: hidden;
+        height: 245px;
+    }
+
+    
+    #title {
+        font-size: 13px;
+    }
+    
+    .input-location {
+        overflow: hidden; 
+    }
+    
+    #newLocation {
+        font-size: 13px;
+        width: 74%;
+        display: inline-block;
+    }
+    
+    #btn-submit {
+       float: right;
+        font-size: 13px;
+    }
+    
+    .btn-filter {
+        margin: 0px 0px 5px 0px;
+    }
+    
+    .btn-term {
+        width: 32%;
+        font-size: 13px;
+    }
+    .search input {
+        font-size: 13px;
+        margin: 0px 0px 5px 0px;
+    }
+    
+    h4 {
+        font-size: 14px;
+        margin: 8px 0px 3px 0px;
+    }
+    
+    #list {
+        display: none;
+    }
+    
+    .list-park {
+        font-size: 13px;
+        width: 100%;
+        display: block;
+        white-space: nowrap;
+        overflow: auto; 
+    }
+    
+    .park {
+        display: inline-block;
+        margin: 0px 1px 0px 1px;
+     }
+    
+}
+
+/*Extra small devices (portrait phones, less than 576px)*/
+@media (min-width: 331px) and (max-width: 567px) {
+
+    #map {
+        height: 115%;
+        margin-top: -165px;
+        top: auto;
+        z-index: 1;
+    }
+    
+    .navbar-inverse {
+        position: relative;
+        background-color: rgba(0,0,0,0.8);
+        z-index: 2;
+    }
+    
+    .navbar-collapse.in {
+       overflow-y: hidden;
+        height: 260px;
+    }
+
+    #title {
+        font-size: 16px;
+    }
+    
+    .input-location {
+        overflow: hidden; 
+    }
+    
+    #newLocation {
+        width: 77%;
+        display: inline-block;
+    }
+    
+    #btn-submit {
+       float: right;
+    }
+    
+    .btn-filter {
+        margin: 0px 0px 5px 0px;
+    }
+    
+    .btn-term {
+        width: 32.5%;
+    }
+    .search input {
+        margin: 0px 0px 5px 0px;
+    }
+    
+    h4 {
+        font-size: 17px;
+        margin: 8px 0px 3px 0px;
+    }
+    
+    #list {
+        display: none;
+    }
+    
+    .list-park {
+        width: 100%;
+        display: block;
+        white-space: nowrap;
+        overflow: auto; 
+    }
+    
+    .park {
+        display: inline-block;
+        margin: 0px 1px 0px 1px;
+     }
+}
+
+/*Small devices (landscape phones, 576px and up)*/
+@media (min-width: 568px) and (max-width: 767px) {
+    
+    #map {
+        height: 87%;
+        margin-top: -22px;
+        top: auto;
+        z-index: 1;
+    }
+    
+    .navbar-inverse {
+        position: relative;
+        background-color: rgba(0,0,0,0.8);
+        z-index: 2;
+    }
+    
+    .navbar-collapse.in {
+       overflow-y: hidden;
+        height: 260px;
+    }
+
+    #title {
+        font-size: 16px;
+    }
+    
+    .input-location {
+        overflow: hidden; 
+    }
+    
+    #newLocation {
+        width: 88%;
+        display: inline-block;
+    }
+    
+    #btn-submit {
+       float: right;
+    }
+    
+    .btn-filter {
+        margin: 0px 0px 5px 0px;
+    }
+    
+    .btn-term {
+        width: 32.5%;
+    }
+    .search input {
+        margin: 0px 0px 5px 0px;
+    }
+    
+    h4 {
+        font-size: 17px;
+        margin: 8px 0px 3px 0px;
+    }
+    
+    #list {
+        display: none;
+    }
+    
+    .list-park {
+        width: 100%;
+        display: block;
+        white-space: nowrap;
+        overflow: auto; 
+    }
+    
+    .park {
+        display: inline-block;
+        margin: 0px 1px 0px 1px;
+     }
+}
+
+/*Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) and (max-width: 991px) {
+    
+    .park-details {
+        margin: 0 25%;
+    }
+}
+
+/*Large devices (desktops, 992px and up)
+/*
+@media (min-width: 992px) and (max-width: 1199px) {
+    .park {
+        background-color: green;
+    }
+}
+
+
+/*Extra large devices (large desktops, 1200px and up)*/
+/*
+@media (min-width: 1200px) {
+    .park {
+        background-color: blue;
+    }
+}*/
