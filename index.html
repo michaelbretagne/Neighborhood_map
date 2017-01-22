@@ -6,74 +6,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="css/styles.css" rel="stylesheet" type="text/css">
-    <title>Park finder</title>
+    <title>Top Ten</title>
 </head>
 
 <body>
-    <div id="wrapper">
-        <div id="map"></div>
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="true">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a href="www.michaeldonal.com" class="navbar-brand"><span data-bind="text: title"></span></a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <form class="navbar-form navbar-right" data-bind="submit: newLocation">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="newLocation" placeholder="Location, ex: Oakland" value="" data-bind="value: input">
-                        </div>
-                        <button type="submit" class="btn btn-default" data-bind="click: newLocation">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </nav>
+    <nav class="navbar navbar-inverse">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3 pull-left">
-                    <div class="list-group text-center" data-bind="visible: displayList">
-                        <div class="search ">
-                           <span class="fa fa-search"></span>
-                            <input type="text" id="search" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavBar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="www.michaeldonal.com" class="navbar-brand" id="title"><span data-bind="text: title"></span></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavBar">
+                <form class="navbar-form navbar-right" data-bind="submit: newLocation">
+                    <div class="form-group">
+                        <div class="input-location">
+                            <input type="text" class="form-control" id="newLocation" placeholder="Location, ex: Oakland" value="" data-bind="value: input">
+                            <button type="submit" class="btn btn-default" id="btn-submit" data-bind="click: newLocation">Submit</button>
                         </div>
-                        <div class="btn-filter">
-                            <button type="submit" class="btn btn-default" data-bind="click: parkTerm">Parks</button>
-                            <button type="submit" class="btn btn-default" data-bind="click: playgroundTerm">Playgrounds</button>
-                            <button type="submit" class="btn btn-default" data-bind="click: hikingTerm">Hikes</button>
-                        </div>
-                        <ul class="scrollbar" id="list-park" data-bind="foreach: filteredData">
-                            <li class="park" data-bind=" click: $parent.placeInfoBox">
-                                <h4><span data-bind="text: name"></span></h4>
-                                <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
-                                <br>
-                                <img data-bind="attr: { src: ratingImg }">
-                                <p><span data-bind="text: rating"></span> stars / <span data-bind="text: reviewNum"></span> reviews</p>
-                            </li>
-                        </ul>
                     </div>
-                </div>
-<!--
-                <div class="btn-close">
-                    <input type="checkbox" data-bind="checked: displayList">
-                </div>
--->
-                <div class="col-md-3 pull-right text-center" data-bind="visible: displayDetails">
-                    <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">
-                        <div class="park-details park">
-                            <h4><span data-bind="text: park"></span></h4>
-                            <p class="text"><span data-bind="text: text"></span></p>
-                            <img class="image" data-bind="attr: { src: image }">
-                        </div>
-                    </a>
+                </form>
+                <div class="list-group text-center hidden-lg hidden-md hidden-sm" data-bind="visible: displayList">
+                    <div class="search">
+                        <span class="fa fa-search"></span>
+                        <input type="text" id="search" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
+                    </div>
+                    <div class="btn-filter">
+                        <button type="submit" class="btn btn-default btn-term" data-bind="click: parkTerm">Parks</button>
+                        <button type="submit" class="btn btn-default btn-term" data-bind="click: playgroundTerm">Playgrounds</button>
+                        <button type="submit" class="btn btn-default btn-term" data-bind="click: hikingTerm">Hikes</button>
+                    </div>
+                    <ul class="scrollbar list-park" data-bind="foreach: filteredData">
+                        <li class="park" data-bind=" click: $parent.placeInfoBox">
+                            <h4><span data-bind="text: name"></span></h4>
+                            <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
+                            <br>
+                            <img data-bind="attr: { src: ratingImg }">
+                            <p><span data-bind="text: rating"></span> stars / <span data-bind="text: reviewNum"></span> reviews</p>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
+    </nav>
+    <div id="map"></div>
+    <div class="container-fluid" id="list">
+        <div class="row">
+            <div class="col-md-3 pull-left">
+                <div class="list-group text-center" data-bind="visible: displayList">
+                    <div class="search ">
+                        <span class="fa fa-search"></span>
+                        <input type="text" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
+                    </div>
+                    <div class="btn-filter">
+                        <button type="submit" class="btn btn-default" data-bind="click: parkTerm">Parks</button>
+                        <button type="submit" class="btn btn-default" data-bind="click: playgroundTerm">Playgrounds</button>
+                        <button type="submit" class="btn btn-default" data-bind="click: hikingTerm">Hikes</button>
+                    </div>
+                    <ul class="scrollbar list-park" data-bind="foreach: filteredData">
+                        <li class="park" data-bind=" click: $parent.placeInfoBox">
+                            <h4><span data-bind="text: name"></span></h4>
+                            <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
+                            <br>
+                            <img data-bind="attr: { src: ratingImg }">
+                            <p><span data-bind="text: rating"></span> stars / <span data-bind="text: reviewNum"></span> reviews</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 pull-right text-center" id="details" data-bind="visible: displayDetails">
+                <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">
+                    <div class="park-details park">
+                        <h4><span data-bind="text: park"></span></h4>
+                        <p class="text"><span data-bind="text: text"></span></p>
+                        <img class="image" data-bind="attr: { src: image }">
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
+
     <script>
         function googlesuccess() {
             app();
@@ -81,6 +97,7 @@
     </script>
     <script src="https://use.fontawesome.com/b9afe1fb3a.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
     <script src="bower_components/oauth-signature/dist/oauth-signature.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
