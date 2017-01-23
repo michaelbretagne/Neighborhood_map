@@ -15,6 +15,7 @@ function app() {
     var location = 'San francsico';
     var term = 'parks';
     var map, marker, rating;
+    var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
     var infowindow = new google.maps.InfoWindow();
     var previousInfoWindow = false;
 
@@ -24,7 +25,8 @@ function app() {
     class PlaceObj {
         constructor(name='n/a', street='n/a', city='n/a', latitude='n/a',
                     longitude='n/a', url='n/a', rating='n/a',
-                    ratingImg='n/a', reviewNum='n/a', image='n/a', text='n/a') {
+                    ratingImg='n/a', reviewNum='n/a', image='n/a', text='n/a',
+                    term='n/a', letter='n/a') {
             this.name = name;
             this.street = street;
             this.city = city;
@@ -36,14 +38,31 @@ function app() {
             this.reviewNum = reviewNum;
             this.image = image;
             this.text = text;
+            this.term = term;
+            this.letter =letter;
+            this.iconSrc = "";
+
+            // Set the marker colors
+            var markerColor;
+            if (this.term === 'parks') {
+                markerColor = 'green';
+            } else if (this.term === 'playgrounds'){
+                markerColor = 'yellow';
+            } else {
+                markerColor = 'brown';
+            }
+
+            // Set icons scr
+            var icons = `screenshots/GoogleMapsMarkers/${markerColor}_Marker${this.letter}.png`
+            this.iconSrc = icons;
 
             //Create a new marker
             this.marker = new google.maps.Marker({
                     position: new google.maps.LatLng(this.latitude, this.longitude),
                     map: map,
+                    icon: icons,
                     animation: google.maps.Animation.DROP
                     });
-
             // Create a new info window
             var infowindowMarker = new google.maps.InfoWindow({
                 content: `<div class='iw-title'>${this.name}</div>
@@ -229,6 +248,9 @@ function app() {
                     var longMap = response.region.center.longitude;
                     displayNewLocation(latMap, longMap);
 
+                    // Possible asignement letters
+                    var letterArr = ['A','B','C','D','E','F','G','H','I','J'];
+
                     // Populate the PlaceObj with the relevant data
                     var yelpData = response.businesses;
                     for (i = 0; i < yelpData.length; i++) {
@@ -244,10 +266,13 @@ function app() {
                         var image = yelpData[i].snippet_image_url
                         var text = yelpData[i].snippet_text
 
+                        // Assign letter for each elements
+                        var letter = letterArr.shift();
+
                         // Push the data into a observable array
                         self.placesList.push(new PlaceObj(parkName, street,
                             city, markerLat, markerLong, url, rating,
-                            ratingImg, reviewNum, image, text));
+                            ratingImg, reviewNum, image, text, term, letter));
 
                         // Set data to a observable for the title computed observable
                         self.city(city);
