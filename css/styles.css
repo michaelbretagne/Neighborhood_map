@@ -111,6 +111,30 @@ input[type="checkbox"] {
     margin: 0px 0px 5px 15px;
 }
 
+.btn-parks {
+    border: 2px solid #97ec7d;
+}
+
+.btn-playgrounds {
+    border: 2px solid #ffee5f;
+}
+
+.btn-hikes {
+    border: 2px solid #cb9d7c;
+}
+
+.btn-parks:focus {
+    background-color: #97ec7d;
+}
+
+.btn-playgrounds:focus {
+    background-color: #ffee5f;
+}
+
+.btn-hikes:focus {
+    background-color: #cb9d7c;
+}
+
 /*---------------------------------------Scrollbar-----------------------------------------*/
 
 ::-webkit-scrollbar {
@@ -136,7 +160,7 @@ input[type="checkbox"] {
 /*----------------------------------------Filtered Park List------------------------------*/
 
 .list-park {
-    height: 560px;
+    height: 540px;
     overflow-y: scroll;
 }
 
@@ -151,7 +175,11 @@ input[type="checkbox"] {
 }
 
 .park:hover {
-    background-color: #f8f8f8;
+    background-color: #ededed;
+}
+
+.letter {
+    float: right;
 }
 
 /*-------------------------------------------Park details box----------------------------------*/
@@ -327,7 +355,8 @@ Extra extra small devices. WTH! iPhone 5!*/
     
     .list-park {
         width: 100%;
-        display: block;
+        display: block; 
+        direction: ltr;
         white-space: nowrap;
         overflow: auto; 
     }
@@ -399,6 +428,7 @@ Extra extra small devices. WTH! iPhone 5!*/
     .list-park {
         width: 100%;
         display: block;
+        direction: ltr;
         white-space: nowrap;
         overflow: auto; 
     }
@@ -416,20 +446,3 @@ Extra extra small devices. WTH! iPhone 5!*/
         margin: 0 25%;
     }
 }
-
-/*Large devices (desktops, 992px and up)
-/*
-@media (min-width: 992px) and (max-width: 1199px) {
-    .park {
-        background-color: green;
-    }
-}
-
-
-/*Extra large devices (large desktops, 1200px and up)*/
-/*
-@media (min-width: 1200px) {
-    .park {
-        background-color: blue;
-    }
-}*/
