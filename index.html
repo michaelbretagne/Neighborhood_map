@@ -36,15 +36,15 @@
                         <input type="text" id="search" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
                     </div>
                     <div class="btn-filter">
-                        <button type="submit" class="btn btn-default btn-term" data-bind="click: parkTerm">Parks</button>
-                        <button type="submit" class="btn btn-default btn-term" data-bind="click: playgroundTerm">Playgrounds</button>
-                        <button type="submit" class="btn btn-default btn-term" data-bind="click: hikingTerm">Hikes</button>
+                        <button type="submit" class="btn btn-default btn-term btn-parks" data-bind="click: parkTerm">Parks</button>
+                        <button type="submit" class="btn btn-default btn-term btn-playgrounds" data-bind="click: playgroundTerm">Playgrounds</button>
+                        <button type="submit" class="btn btn-default btn-term btn-hikes" data-bind="click: hikingTerm">Hikes</button>
                     </div>
                     <ul class="scrollbar list-park" data-bind="foreach: filteredData">
                         <li class="park" data-bind=" click: $parent.placeInfoBox">
                             <h4><span data-bind="text: name"></span></h4>
                             <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
-                            <br>
+                            <img class="letter" data-bind="attr: { src: iconSrc }"><br>
                             <img data-bind="attr: { src: ratingImg }">
                             <p><span data-bind="text: rating"></span> stars / <span data-bind="text: reviewNum"></span> reviews</p>
                         </li>
@@ -54,6 +54,9 @@
         </div>
     </nav>
     <div id="map"></div>
+    <div id="background-error">
+        <p id="map-error">Opps! Something went wrong! We are unable to display Google Map right now. Please try again later!</p>
+    </div>
     <div class="container-fluid" id="list">
         <div class="row">
             <div class="col-md-3 pull-left">
@@ -63,15 +66,15 @@
                         <input type="text" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
                     </div>
                     <div class="btn-filter">
-                        <button type="submit" class="btn btn-default" data-bind="click: parkTerm">Parks</button>
-                        <button type="submit" class="btn btn-default" data-bind="click: playgroundTerm">Playgrounds</button>
-                        <button type="submit" class="btn btn-default" data-bind="click: hikingTerm">Hikes</button>
+                        <button type="submit" class="btn btn-default btn-parks" data-bind="click: parkTerm">Parks</button>
+                        <button type="submit" class="btn btn-default btn-playgrounds " data-bind="click: playgroundTerm">Playgrounds</button>
+                        <button type="submit" class="btn btn-default btn-hikes" data-bind="click: hikingTerm">Hikes</button>
                     </div>
                     <ul class="scrollbar list-park" data-bind="foreach: filteredData">
                         <li class="park" data-bind=" click: $parent.placeInfoBox">
                             <h4><span data-bind="text: name"></span></h4>
-                            <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
-                            <br>
+                            <a class="link" target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
+                            <img class="letter" data-bind="attr: { src: iconSrc }"><br>
                             <img data-bind="attr: { src: ratingImg }">
                             <p><span data-bind="text: rating"></span> stars / <span data-bind="text: reviewNum"></span> reviews</p>
                         </li>
@@ -90,18 +93,14 @@
         </div>
     </div>
 
-    <script>
-        function googlesuccess() {
-            app();
-        }
-    </script>
     <script src="https://use.fontawesome.com/b9afe1fb3a.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
     <script src="bower_components/oauth-signature/dist/oauth-signature.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAATegb_vfnrK5i8ovNBjf9htL88PNMA00&callback=googlesuccess" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAATegb_vfnrK5i8ovNBjf9htL88PNMA00&callback=googleSuccess" onerror="googleError()" async defer></script>
+    
 </body>
 
 </html>
