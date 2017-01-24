@@ -53,7 +53,7 @@ function app() {
             }
 
             // Set icons scr
-            var icons = `screenshots/GoogleMapsMarkers/${markerColor}_Marker${this.letter}.png`
+            var icons = `ressources/GoogleMapsMarkers/${markerColor}_Marker${this.letter}.png`;
             this.iconSrc = icons;
 
             //Create a new marker
@@ -63,6 +63,7 @@ function app() {
                     icon: icons,
                     animation: google.maps.Animation.DROP
                     });
+
             // Create a new info window
             var infowindowMarker = new google.maps.InfoWindow({
                 content: `<div class='iw-title'>${this.name}</div>
@@ -72,13 +73,6 @@ function app() {
 
             // Open the info window when the marker is clicked
             google.maps.event.addListener(this.marker, 'click', function() {
-
-                // Bounce marker
-              //   if (this.getAnimation() !== null) {
-              //   this.setAnimation(null);
-              // } else {
-              //   this.setAnimation(google.maps.Animation.BOUNCE);
-              // }
 
                 // Close the last opened info window if there is one open
                 closeInfoWindow();
@@ -92,18 +86,49 @@ function app() {
         }
     }
 
+    // Object for the weather info
+    class currentWeather {
+        constructor(weatherIcon='n/a', temperature='n/a') {
+            this.weatherIcon = weatherIcon;
+            this.temperature = temperature;
+            this.icon = '';
+
+            // Set icons depending on the weather
+            if (this.weatherIcon === 'clear-day') {
+                this.icon = 'ressources/weatherIcons/sunny.png';
+            } else if (this.weatherIcon === 'clear-night') {
+                this.icon = 'ressources/weatherIcons/clear-night.png';
+            } else if (this.weatherIcon === 'cloudy') {
+                this.icon = 'ressources/weatherIcons/cloudy.png';
+            } else if (this.weatherIcon === 'fog') {
+                this.icon = 'ressources/weatherIcons/fog.png';
+            } else if (this.weatherIcon === 'partly-cloudy-day') {
+                this.icon = 'ressources/weatherIcons/partly-cloudy-day.png';
+            } else if (this.weatherIcon === 'partly-cloudy-night') {
+                this.icon = 'ressources/weatherIcons/partly-cloudy-night.png';
+            } else if (this.weatherIcon === 'rain') {
+                this.icon = 'ressources/weatherIcons/rain.png';
+            } else if (this.weatherIcon === 'snow') {
+                this.icon = 'ressources/weatherIcons/light-snow.png';
+            } else {
+                this.icon = 'ressources/weatherIcons/sunny.png';
+            }
+        }
+    }
+
+
     // View Model
     function ViewModel() {
         var self = this;
 
-        yelpInfo(location);
+        yelpInfo();
 
         // Title observabables
         self.city = ko.observable();
         self.terms = ko.observable();
         self.title = ko.computed(function() {
              return `Top 10 ${self.terms()} in ${self.city()}`;
-         })
+         });
 
         // New location input observable
         self.input = ko.observable();
@@ -112,6 +137,7 @@ function app() {
             location = self.input();
             self.displayDetails(false);
             self.placesList([]);
+            self.weathers([]);
             yelpInfo();
         };
         // Call API for best parks
@@ -119,6 +145,7 @@ function app() {
             term = 'parks';
             self.displayDetails(false);
             self.placesList([]);
+            self.weathers([]);
             yelpInfo();
         };
         // Call API for best playgrounds
@@ -126,6 +153,7 @@ function app() {
             term = 'playgrounds';
             self.displayDetails(false);
             self.placesList([]);
+            self.weathers([]);
             yelpInfo();
         };
         // Call API for best hikes
@@ -133,6 +161,7 @@ function app() {
             term = 'hikes';
             self.displayDetails(false);
             self.placesList([]);
+            self.weathers([]);
             yelpInfo();
         };
 
@@ -146,16 +175,17 @@ function app() {
         self.filteredData = ko.computed(function() {
             var filter = self.query().toLowerCase();
 
-        self.placesList().forEach(el => el.marker.setVisible(true));
+            // Set all the markers as visible
+            self.placesList().forEach(el => el.marker.setVisible(true));
 
             if (!filter) {
-                // If the filter is not activate all markers are visible
+                // If the filter is not activate it return all the places
                 return self.placesList();
             } else {
+                // Only marker matching filter input of the park name will be visible
                 return ko.utils.arrayFilter(self.placesList(), function(item) {
                 var bool = item.name.toLowerCase().indexOf(filter) !== -1;
                 if (bool === false) {
-                    // Only marker matching filter input of the park name will be visible
                     item.marker.setVisible(false);
                     closeInfoWindow();
                 }
@@ -189,14 +219,16 @@ function app() {
             previousInfoWindow = infowindow;
             // Center map on marker click
             map.setCenter(clickedPark.marker.getPosition());
-            // Pass data into observable
-            self.park(clickedPark.name)
+            // Pass data into observables
+            self.park(clickedPark.name);
             self.text(clickedPark.text);
             self.image(clickedPark.image);
             self.url(clickedPark.url);
-            // Display the details
+            // Display the details of a place
             self.displayDetails(true);
         };
+
+        self.weathers = ko.observableArray([]);
 
         // Get data from yelp API
         function yelpInfo() {
@@ -243,10 +275,12 @@ function app() {
                 cache: true,
                 dataType: 'jsonp',
                 success: function(response) {
-                    // Set the center of the map
-                    var latMap = response.region.center.latitude;
-                    var longMap = response.region.center.longitude;
+                    // Set the center of the map and display the location
+                    latMap = response.region.center.latitude;
+                    longMap = response.region.center.longitude;
                     displayNewLocation(latMap, longMap);
+                    // Display the weather
+                    weatherInfo(latMap, longMap);
 
                     // Possible asignement letters
                     var letterArr = ['A','B','C','D','E','F','G','H','I','J'];
@@ -263,8 +297,8 @@ function app() {
                         var rating =yelpData[i].rating;
                         var ratingImg = yelpData[i].rating_img_url_small;
                         var reviewNum =yelpData[i].review_count;
-                        var image = yelpData[i].snippet_image_url
-                        var text = yelpData[i].snippet_text
+                        var image = yelpData[i].snippet_image_url;
+                        var text = yelpData[i].snippet_text;
 
                         // Assign letter for each elements
                         var letter = letterArr.shift();
@@ -286,6 +320,27 @@ function app() {
             };
             // Send off the ajax request to Yelp
             $.ajax(ajaxSettings);
+        }
+
+        // Get the current waether from Dark Sky API (https://darksky.net)
+        function weatherInfo(latitude, longitude) {
+
+            // Use the GET method for the request
+            var httpMethod = 'GET';
+            // API request url
+            var darkSkyURL = `https://api.darksky.net/forecast/1b3811d9b82e836d5238991f3108fc90/${latitude},${longitude}`;
+
+            $.ajax({
+                url: darkSkyURL,
+                dataType: "jsonp",
+                    }).done(function(data) {
+
+                    var weather = data.currently.icon;
+                    var temp = data.currently.temperature;
+
+                    // Push a new object currentWeather into the weather observable array
+                    self.weathers.push(new currentWeather(weather, temp));
+                });
         }
     } // End of ViewModel
 
