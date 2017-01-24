@@ -34,6 +34,6 @@ The app is **mobile friendly** but you will get the full experience and have acc
 ##Screenshots
 
 <p align="center">
-  <img src="ressources/desktop-v.png" width="200px"/>
-  <img src="ressources/mobile-v.png" width="110px"/>
+  <img src="ressources/desktop-v.png" width="319px"/>
+  <img src="ressources/mobile-v.png" width="150px"/>
 </p>
