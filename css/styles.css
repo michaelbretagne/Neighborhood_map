@@ -1,14 +1,23 @@
+/*
+Styles.css
+Neighborhood_map developped by Michael Donal
+*/
+
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
+
 body {
-  margin-bottom: 7%;
+    margin-bottom: 7%;
 }
-    
+
+
+/*--------------------------Map and background-------------------------------*/
+
 #map {
     position: absolute;
-    height: 92%;
+    height: 95%;
     width: 100%;
     top: 0;
     right: 0;
@@ -37,8 +46,11 @@ body {
     background-color: rgba(255, 80, 80, 0.80);
 }
 
+
+/*--------------------------Navbar and container-----------------------------*/
+
 .navbar-inverse {
-    background-color: rgba(0,0,0,.7);
+    background-color: rgba(0, 0, 0, .7);
     z-index: 2;
 }
 
@@ -46,6 +58,9 @@ body {
     height: 280px;
 }
 
+.navbar-inverse .navbar-brand {
+    color: #fff;
+}
 
 .container {
     margin-right: 10px;
@@ -55,6 +70,9 @@ body {
     bottom: 30px;
     left: 20px;
 }
+
+
+/*--------------------------------Reusable-----------------------------------*/
 
 h4,
 p {
@@ -73,11 +91,12 @@ ul {
     padding: 0;
 }
 
-.navbar-inverse .navbar-brand {
-    color: #fff;
-}
 
-/*----------------------------------------Inputs / Buttons------------------------------*/
+/*-----------------------------Inputs / Buttons------------------------------*/
+
+.input-location {
+    display: inline-block;
+}
 
 .search {
     position: relative;
@@ -86,19 +105,19 @@ ul {
     font-size: 16px;
     display: inline-block;
 }
+
 .search input {
+    box-sizing: border-box;
     height: 32px;
+    text-indent: 5px;
+    padding-right: 30px;
     margin: 0px 5px 5px 5px;
     background: #fcfcfc;
     border: 1px solid #aaa;
     border-radius: 5px;
     box-shadow: 0 0 3px #ccc, 0 10px 15px #ebebeb inset;
 }
-.search input {
-    text-indent: 5px;
-    padding-right: 30px;
-    box-sizing: border-box;
-}
+
 .search .fa-search {
     position: absolute;
     top: 8px;
@@ -133,8 +152,8 @@ ul {
     background-color: #cb9d7c;
 }
 
-/*----------------------------------------Weather Icons------------------------------*/
 
+/*-------------------------------Weather Icons-------------------------------*/
 
 .weather {
     display: inline-block;
@@ -153,32 +172,32 @@ ul {
     display: inline-block;
     color: #fff;
     margin: 0px 50px 0px 10px;
-
 }
 
-/*---------------------------------------Scrollbar-----------------------------------------*/
+
+/*----------------------------------Scrollbar--------------------------------*/
 
 ::-webkit-scrollbar {
     width: 12px;
 }
- 
+
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
-}
- 
-::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
 
-.scrollbar { 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.scrollbar {
     direction: rtl;
     text-align: left;
 }
 
 
-/*----------------------------------------Filtered Park List------------------------------*/
+/*---------------------------Filtered Park List------------------------------*/
 
 .list-park {
     height: 540px;
@@ -191,7 +210,7 @@ ul {
     padding: 0px 20px;
     margin: 0px 5px 5px 5px;
     border-radius: 2px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     border: 1px solid #fff;
 }
 
@@ -207,7 +226,8 @@ ul {
     height: 25px;
 }
 
-/*-------------------------------------------Park details box----------------------------------*/
+
+/*-----------------------------Park details box------------------------------*/
 
 .park-details {
     margin-top: 25%;
@@ -224,20 +244,23 @@ ul {
     bottom: 0;
 }
 
-/*----------------------------------------Goolge Info windows---------------------------------*/
+
+/*----------------------------Goolge Info windows----------------------------*/
 
 .iw-title {
-   font-size: 16px;
-   font-weight: 400;
-   color: #404040;;
+    font-size: 16px;
+    font-weight: 400;
+    color: #404040;
+    ;
 }
 
-/*------------------------------------------------Footer-------------------------------------*/
+
+/*---------------------------------Footer------------------------------------*/
 
 #footer {
     position: absolute;
     width: 100%;
-    height: 8%;
+    height: 5%;
     bottom: 0;
     text-align: center;
     margin: 0 0 0 0;
@@ -246,6 +269,8 @@ ul {
 }
 
 .social-links {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
     list-style: none;
     padding: 5px 0px 0px 0px;
@@ -253,17 +278,19 @@ ul {
 
 .icons:link,
 .icons:visited {
-    font-size: 130%; 
+    font-size: 130%;
     color: #888;
+    -webkit-transition: color 0.2s;
     transition: color 0.2s;
     margin-right: 10px;
     margin-left: 10px;
 }
-    
+
 .fa-github,
 .fa-twitter,
 .fa-linkedin,
 .fa-globe {
+    -webkit-transition: color 0.2s;
     transition: color 0.2s;
 }
 
@@ -274,7 +301,7 @@ ul {
 .fa-twitter:hover {
     color: #55acee;
 }
- 
+
 .fa-linkedin:hover {
     color: #0077B5;
 }
@@ -310,61 +337,54 @@ ul {
 }
 
 
-/*-------------------------------------------Media query----------------------------------------*/
+/*--------------------------------Media query--------------------------------*/
 
-/*
 
-Extra extra small devices. WTH! iPhone 5!*/
+/*-------------------------Extra extra small devices-------------------------*/
+
 @media (max-width: 330px) {
-        
+    /*Map*/
     #map {
-        height: 115%;
+        height: 107%;
         margin-top: -165px;
         top: auto;
         z-index: 1;
     }
-    
-     #map-error {
+    #map-error {
         width: 60%;
         text-align: center;
         margin: 50% auto;
     }
-    
+    /*Navbar*/
     .navbar-inverse {
         position: relative;
-        background-color: rgba(0,0,0,0.8);
+        background-color: rgba(0, 0, 0, 0.8);
         z-index: 2;
     }
-    
     .navbar-collapse.in {
-       overflow-y: hidden;
-        height: 245px;
+        overflow-y: hidden;
+        height: 255px;
     }
-
-    
     #title {
         font-size: 13px;
     }
-    
+    /*Input & Btn*/
     .input-location {
-        overflow: hidden; 
+        overflow: hidden;
+        display: block;
     }
-    
     #newLocation {
         font-size: 13px;
         width: 74%;
         display: inline-block;
     }
-    
     #btn-submit {
-       float: right;
+        float: right;
         font-size: 13px;
     }
-    
     .btn-filter {
         margin: 0px 0px 5px 0px;
     }
-    
     .btn-term {
         width: 32%;
         font-size: 13px;
@@ -373,277 +393,232 @@ Extra extra small devices. WTH! iPhone 5!*/
         font-size: 13px;
         margin: 0px 0px 5px 0px;
     }
-    
+    /*Reusable*/
     h4 {
         font-size: 14px;
         margin: 8px 0px 3px 0px;
     }
-    
+    /*Filtered park list*/
     #list {
         display: none;
     }
-    
     .list-park {
         font-size: 13px;
         width: 100%;
         display: block;
         white-space: nowrap;
-        overflow: auto; 
+        overflow: auto;
     }
-    
     .park {
         display: inline-block;
         margin: 0px 1px 0px 1px;
-     }
-    
-    #map {
-        height: 107%;
     }
-    
+    /*Footer*/
     #footer {
         height: 10%;
     }
-    
     .logo-ds {
         height: 18px;
     }
-
     .logo-g {
         height: 8px;
         margin-right: 10px;
     }
-
     .logo-y {
         height: 20px;
         margin-top: -8px;
     }
-    
     .yelp-link {
         font-size: 7px;
     }
-    
 }
 
-/*Extra small devices (portrait phones, less than 576px)*/
-@media (min-width: 331px) and (max-width: 567px) {
 
+/*-----------Extra small devices (portrait phones, less than 576px)----------*/
+
+@media (min-width: 331px) and (max-width: 567px) {
+    /*Map*/
     #map {
-        height: 115%;
+        height: 104%;
         margin-top: -165px;
         top: auto;
         z-index: 1;
     }
-    
-        
     #map-error {
         width: 60%;
         text-align: center;
         margin: 50% auto;
     }
-    
+    /*Navbar*/
     .navbar-inverse {
         position: relative;
-        background-color: rgba(0,0,0,0.8);
+        background-color: rgba(0, 0, 0, 0.8);
         z-index: 2;
     }
-    
     .navbar-collapse.in {
-       overflow-y: hidden;
+        overflow-y: hidden;
         height: 260px;
     }
-
     #title {
         font-size: 16px;
     }
-    
+    /*Input & btn*/
     .input-location {
-        overflow: hidden; 
+        overflow: hidden;
+        display: block;
     }
-    
     #newLocation {
         width: 77%;
         display: inline-block;
     }
-    
     #btn-submit {
-       float: right;
+        float: right;
     }
-    
     .btn-filter {
         margin: 0px 0px 5px 0px;
     }
-    
     .btn-term {
         width: 32.5%;
     }
     .search input {
         margin: 0px 0px 5px 0px;
     }
-    
+    /*Reusable*/
     h4 {
         font-size: 17px;
         margin: 8px 0px 3px 0px;
     }
-    
+    /*Park list*/
     #list {
         display: none;
     }
-    
     .list-park {
         width: 100%;
-        display: block; 
+        display: block;
         direction: ltr;
         white-space: nowrap;
-        overflow: auto; 
+        overflow: auto;
     }
-    
     .park {
         display: inline-block;
         margin: 0px 1px 0px 1px;
-     }
-    
-    #map {
-        height: 104%;
     }
-    
+    /*Footer*/
     #footer {
         height: 9%;
     }
-    
     .logo-ds {
         height: 18px;
     }
-
     .logo-g {
         height: 8px;
         margin-right: 10px;
     }
-
     .logo-y {
         height: 20px;
         margin-top: -8px;
     }
-    
     .yelp-link {
         font-size: 7px;
     }
 }
 
-/*Small devices (landscape phones, 576px and up)*/
+
+/*---------------Small devices (landscape phones, 576px and up)--------------*/
+
 @media (min-width: 568px) and (max-width: 767px) {
-    
+    /*Map*/
     #map {
         height: 87%;
         margin-top: -22px;
         top: auto;
         z-index: 1;
     }
-    
+    /*Navbar*/
     .navbar-inverse {
         position: relative;
-        background-color: rgba(0,0,0,0.8);
+        background-color: rgba(0, 0, 0, 0.8);
         z-index: 2;
     }
-    
     .navbar-collapse.in {
-       overflow-y: hidden;
+        overflow-y: hidden;
         height: 260px;
     }
-
     #title {
         font-size: 16px;
     }
-    
+    /*Input & btn*/
     .input-location {
-        overflow: hidden; 
+        overflow: hidden;
+        display: block;
     }
-    
     #newLocation {
         width: 88%;
         display: inline-block;
     }
-    
     #btn-submit {
-       float: right;
+        float: right;
     }
-    
     .btn-filter {
         margin: 0px 0px 5px 0px;
     }
-    
     .btn-term {
         width: 32.5%;
     }
     .search input {
         margin: 0px 0px 5px 0px;
     }
-    
+    /*Reusable  */
     h4 {
         font-size: 17px;
         margin: 8px 0px 3px 0px;
     }
-    
+    /*Park list*/
     #list {
         display: none;
     }
-    
     .list-park {
         width: 100%;
         display: block;
         direction: ltr;
         white-space: nowrap;
-        overflow: auto; 
+        overflow: auto;
     }
-    
     .park {
         display: inline-block;
         margin: 0px 1px 0px 1px;
-     }
-    
+    }
+    /*Footerr*/
     #footer {
         display: none;
     }
 }
 
-/*Medium devices (tablets, 768px and up)*/
+
+/*-------------------Medium devices (tablets, 768px and up)------------------*/
+
 @media (min-width: 768px) and (max-width: 991px) {
-    
-    .park-details {
-        margin: 0 25%;
-    }
-    
-    .input-location {
-        display: inline-block;
-    }
-    
-    .weather-icon {
-        max-height: 30px;
-    }
-    
-    .temp {
-        margin: 0px 10px 0px 5px;
-    }
-    
-    #footer {
-        height: 6%;
-    }
-    
+    /*Map*/
     #map {
         height: 94%;
     }
-}
-
-@media (min-width: 992px) {
-    
-     .input-location {
-    display: inline-block;
+    /*Park details*/
+    .park-details {
+        margin: 0 25%;
     }
-    
+    /*Input*/
+    .input-location {
+        display: inline-block;
+    }
+    /*Weather icon and temperature*/
+    .weather-icon {
+        max-height: 30px;
+    }
+    .temp {
+        margin: 0px 10px 0px 5px;
+    }
+    /*Footer*/
     #footer {
-        height: 5%;
-    }
-    
-    #map {
-        height: 95%;
+        height: 6%;
     }
 }
