@@ -1,3 +1,6 @@
+// script.js
+// Neighborhood_map developped by Michael Donal
+
 // Start app if no error from Google API
 function googleSuccess() {
             app();
@@ -140,6 +143,10 @@ function app() {
             self.weathers([]);
             yelpInfo();
         };
+
+        // Observable array of the weather information
+        self.weathers = ko.observableArray([]);
+
         // Call API for best parks
         self.parkTerm = function() {
             term = 'parks';
@@ -165,7 +172,7 @@ function app() {
             yelpInfo();
         };
 
-        // Observable of the list who get the filtered list from ko.computed
+        // Observable array of all the places
         self.placesList = ko.observableArray([]);
 
         // Observable of the query from the search bar
@@ -194,10 +201,12 @@ function app() {
               }
           });
 
-        // Display/hide the parks list box
+        // Display or hide the parks list box
         self.displayList = ko.observable(true);
-        // Display/hide the details of a selected park
+
+        // Display or hide the details of a selected park
         self.displayDetails = ko.observable(false);
+
         // Parks's details observable
         self.park = ko.observable();
         self.text = ko.observable();
@@ -206,29 +215,33 @@ function app() {
 
         // Open info window when a marker is clicked from the HTML DOM list
         self.placeInfoBox = function(clickedPark) {
-            // Close the last opened info window if there is one open
-            closeInfoWindow();
-            // Format content
+
+            // Format content for the info windows
             var formattedContent = `<div class='iw-title'>${clickedPark.name}</div>
                                     <div class='iw-address'>${clickedPark.street}</div>
                                     <div class='iw-address'>${clickedPark.city}</div>`;
+
+            // Close the last opened info window if there is one open
+            closeInfoWindow();
             // Open the info window and set content on the marker
             infowindow.setContent(formattedContent);
             infowindow.open(map, clickedPark.marker);
+
             // Declare that a info window is open
             previousInfoWindow = infowindow;
+
             // Center map on marker click
             map.setCenter(clickedPark.marker.getPosition());
+
             // Pass data into observables
             self.park(clickedPark.name);
             self.text(clickedPark.text);
             self.image(clickedPark.image);
             self.url(clickedPark.url);
+
             // Display the details of a place
             self.displayDetails(true);
         };
-
-        self.weathers = ko.observableArray([]);
 
         // Get data from yelp API
         function yelpInfo() {
@@ -282,7 +295,7 @@ function app() {
                     // Display the weather
                     weatherInfo(latMap, longMap);
 
-                    // Possible asignement letters
+                    // Possible assignement letters
                     var letterArr = ['A','B','C','D','E','F','G','H','I','J'];
 
                     // Populate the PlaceObj with the relevant data
@@ -330,6 +343,7 @@ function app() {
             // API request url
             var darkSkyURL = `https://api.darksky.net/forecast/1b3811d9b82e836d5238991f3108fc90/${latitude},${longitude}`;
 
+            // Ajax call
             $.ajax({
                 url: darkSkyURL,
                 dataType: "jsonp",
