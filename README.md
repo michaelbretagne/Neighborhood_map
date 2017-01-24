@@ -25,6 +25,7 @@ The app is **mobile friendly** but you will get the full experience and have acc
 - [Google Map API](https://developers.google.com/maps/)
 - [Yelp API](https://www.yelp.com/developers/documentation/v2/overview)
 - [Dark Sky API](https://darksky.net/dev/)
+- [Simple weather icons](http://www.danvierich.de/weather/) by Daniel Vierich
 - Colored Markers by [benjaminkeen](http://www.benjaminkeen.com/google-maps-coloured-markers/)
 - OAuth 1.0a signature generator by [bettiolo](https://github.com/bettiolo/oauth-signature-js)
 - Udacity forum
@@ -32,6 +33,7 @@ The app is **mobile friendly** but you will get the full experience and have acc
 
 ##Screenshots
 
-![Desktop screenshot](ressources/desktop-v.png =200x)
-
-![Mobile screenshot](ressources/mobile-v.png =40x)
+<p align="center">
+  <img src="ressources/desktop-v.png" width="200px"/>
+  <img src="ressources/mobile-v.png" width="110px"/>
+</p>
