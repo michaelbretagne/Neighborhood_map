@@ -1,14 +1,17 @@
-body, html {
-    height: 100%;
-    width: 100%;
+html {
+  position: relative;
+  min-height: 100%;
 }
-
+body {
+  margin-bottom: 7%;
+}
+    
 #map {
-    height: 100%;
+    position: absolute;
+    height: 92%;
     width: 100%;
     top: 0;
     right: 0;
-    position: absolute;
     z-index: 0;
 }
 
@@ -19,7 +22,7 @@ body, html {
     top: 0;
     right: 0;
     z-index: 100;
-    background-image: url(../screenshots/desktop-v.png);
+    background-image: url(../ressources/desktop-v.png);
     background-size: contain;
     display: none;
 }
@@ -76,11 +79,6 @@ ul {
 
 /*----------------------------------------Inputs / Buttons------------------------------*/
 
-input[type="checkbox"] {
-    position: relative;
-    font-size: 15px;
-}
-
 .search {
     position: relative;
     width: 100%;
@@ -135,6 +133,29 @@ input[type="checkbox"] {
     background-color: #cb9d7c;
 }
 
+/*----------------------------------------Weather Icons------------------------------*/
+
+
+.weather {
+    display: inline-block;
+}
+
+.weather-icon {
+    max-height: 34px;
+    font-size: 16px;
+    color: #fff;
+    padding: 2px 2px;
+    border-radius: 3px;
+    background-color: #fff;
+}
+
+.temp {
+    display: inline-block;
+    color: #fff;
+    margin: 0px 50px 0px 10px;
+
+}
+
 /*---------------------------------------Scrollbar-----------------------------------------*/
 
 ::-webkit-scrollbar {
@@ -182,6 +203,10 @@ input[type="checkbox"] {
     float: right;
 }
 
+.yelp-list {
+    height: 25px;
+}
+
 /*-------------------------------------------Park details box----------------------------------*/
 
 .park-details {
@@ -192,13 +217,98 @@ input[type="checkbox"] {
     border-radius: 5px;
 }
 
-/*----------------------------------------Goolge Info windows*---------------------------------*/
+.yelp-details {
+    position: absolute;
+    height: 40px;
+    right: 0;
+    bottom: 0;
+}
+
+/*----------------------------------------Goolge Info windows---------------------------------*/
 
 .iw-title {
    font-size: 16px;
    font-weight: 400;
    color: #404040;;
 }
+
+/*------------------------------------------------Footer-------------------------------------*/
+
+#footer {
+    position: absolute;
+    width: 100%;
+    height: 8%;
+    bottom: 0;
+    text-align: center;
+    margin: 0 0 0 0;
+    border-radius: 3px;
+    background-color: #2F3034;
+}
+
+.social-links {
+    display: inline-flex;
+    list-style: none;
+    padding: 5px 0px 0px 0px;
+}
+
+.icons:link,
+.icons:visited {
+    font-size: 130%; 
+    color: #888;
+    transition: color 0.2s;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+    
+.fa-github,
+.fa-twitter,
+.fa-linkedin,
+.fa-globe {
+    transition: color 0.2s;
+}
+
+.fa-github:hover {
+    color: #fff;
+}
+
+.fa-twitter:hover {
+    color: #55acee;
+}
+ 
+.fa-linkedin:hover {
+    color: #0077B5;
+}
+
+.fa-globe:hover {
+    color: rgba(123, 227, 227, 1);
+}
+
+.powered-by {
+    background-color: #2F3034;
+    padding-bottom: 10px;
+}
+
+.logo-ds {
+    float: left;
+    margin: -10px 5px 0px 0px;
+}
+
+.logo-g {
+    margin-right: 24px;
+    margin-bottom: 2px;
+}
+
+.logo-y {
+    margin: -10px 5px 0 0;
+    float: right;
+}
+
+.yelp-link {
+    float: right;
+    font-size: 12px;
+    color: #fff;
+}
+
 
 /*-------------------------------------------Media query----------------------------------------*/
 
@@ -286,6 +396,32 @@ Extra extra small devices. WTH! iPhone 5!*/
         margin: 0px 1px 0px 1px;
      }
     
+    #map {
+        height: 107%;
+    }
+    
+    #footer {
+        height: 10%;
+    }
+    
+    .logo-ds {
+        height: 18px;
+    }
+
+    .logo-g {
+        height: 8px;
+        margin-right: 10px;
+    }
+
+    .logo-y {
+        height: 20px;
+        margin-top: -8px;
+    }
+    
+    .yelp-link {
+        font-size: 7px;
+    }
+    
 }
 
 /*Extra small devices (portrait phones, less than 576px)*/
@@ -365,6 +501,32 @@ Extra extra small devices. WTH! iPhone 5!*/
         display: inline-block;
         margin: 0px 1px 0px 1px;
      }
+    
+    #map {
+        height: 104%;
+    }
+    
+    #footer {
+        height: 9%;
+    }
+    
+    .logo-ds {
+        height: 18px;
+    }
+
+    .logo-g {
+        height: 8px;
+        margin-right: 10px;
+    }
+
+    .logo-y {
+        height: 20px;
+        margin-top: -8px;
+    }
+    
+    .yelp-link {
+        font-size: 7px;
+    }
 }
 
 /*Small devices (landscape phones, 576px and up)*/
@@ -437,6 +599,10 @@ Extra extra small devices. WTH! iPhone 5!*/
         display: inline-block;
         margin: 0px 1px 0px 1px;
      }
+    
+    #footer {
+        display: none;
+    }
 }
 
 /*Medium devices (tablets, 768px and up)*/
@@ -444,5 +610,40 @@ Extra extra small devices. WTH! iPhone 5!*/
     
     .park-details {
         margin: 0 25%;
+    }
+    
+    .input-location {
+        display: inline-block;
+    }
+    
+    .weather-icon {
+        max-height: 30px;
+    }
+    
+    .temp {
+        margin: 0px 10px 0px 5px;
+    }
+    
+    #footer {
+        height: 6%;
+    }
+    
+    #map {
+        height: 94%;
+    }
+}
+
+@media (min-width: 992px) {
+    
+     .input-location {
+    display: inline-block;
+    }
+    
+    #footer {
+        height: 5%;
+    }
+    
+    #map {
+        height: 95%;
     }
 }
