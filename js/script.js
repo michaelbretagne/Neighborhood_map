@@ -85,6 +85,15 @@ function app() {
                 previousInfoWindow = infowindowMarker;
 
                 vm.displayDetails(false);
+
+                // Bounce marker on click
+                if (this.getAnimation() !== null) {
+                    this.setAnimation(null);
+                } else {
+                    this.setAnimation(google.maps.Animation.BOUNCE);
+                    this.setAnimation(4);
+              }
+
             });
         }
     }
@@ -226,6 +235,9 @@ function app() {
             // Open the info window and set content on the marker
             infowindow.setContent(formattedContent);
             infowindow.open(map, clickedPark.marker);
+
+            // Bounce marker
+            clickedPark.marker.setAnimation(4);
 
             // Declare that a info window is open
             previousInfoWindow = infowindow;
