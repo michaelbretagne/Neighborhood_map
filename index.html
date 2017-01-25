@@ -48,16 +48,16 @@ Neighborhood_map developped by Michael Dona -->
                     </form>
                     <!-- Search filter and filtered list in collapsed navbar for mobile -->
                     <div class="list-group text-center hidden-lg hidden-md hidden-sm" data-bind="visible: displayList">
+                        <!-- Parks, playgrounds and hikes filter buttons handled by knockout.js  -->
+                        <div class="btn-filter">
+                            <button type="submit" class="btn btn-default btn-term btn-parks" autofocus data-bind="click: parkTerm">Parks</button>
+                            <button type="submit" class="btn btn-default btn-term btn-playgrounds" data-bind="click: playgroundTerm">Playgrounds</button>
+                            <button type="submit" class="btn btn-default btn-term btn-hikes" data-bind="click: hikingTerm">Hikes</button>
+                        </div>
                         <!-- Search input handled by knockout.js -->
                         <div class="search">
                             <span class="fa fa-search"></span>
                             <input type="text" id="search" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
-                        </div>
-                        <!-- Parks, playgrounds and hikes filter buttons handled by knockout.js  -->
-                        <div class="btn-filter">
-                            <button type="submit" class="btn btn-default btn-term btn-parks" data-bind="click: parkTerm">Parks</button>
-                            <button type="submit" class="btn btn-default btn-term btn-playgrounds" data-bind="click: playgroundTerm">Playgrounds</button>
-                            <button type="submit" class="btn btn-default btn-term btn-hikes" data-bind="click: hikingTerm">Hikes</button>
                         </div>
                         <!-- Filterd list handled by knockout.js -->
                         <ul class="scrollbar list-park" data-bind="foreach: filteredData">
@@ -87,16 +87,16 @@ Neighborhood_map developped by Michael Dona -->
                 <div class="col-md-3 pull-left">
                     <!-- List of parks, playgrounds or hike -->
                     <div class="list-group text-center" data-bind="visible: displayList">
+                        <!-- Filter buttons (parks, playgrounds, hikes) handled by knockout.js -->
+                        <div class="btn-filter">
+                            <button type="submit" class="btn btn-default btn-parks" autofocus data-bind="click: parkTerm">Parks</button>
+                            <button type="submit" class="btn btn-default btn-playgrounds" data-bind="click: playgroundTerm">Playgrounds</button>
+                            <button type="submit" class="btn btn-default btn-hikes" data-bind="click: hikingTerm">Hikes</button>
+                        </div>
                         <!-- Search filter handled by knockout.js -->
                         <div class="search ">
                             <span class="fa fa-search"></span>
-                            <input type="text" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
-                        </div>
-                        <!-- Filter buttons (parks, playgrounds, hikes) handled by knockout.js -->
-                        <div class="btn-filter">
-                            <button type="submit" class="btn btn-default btn-parks" data-bind="click: parkTerm">Parks</button>
-                            <button type="submit" class="btn btn-default btn-playgrounds " data-bind="click: playgroundTerm">Playgrounds</button>
-                            <button type="submit" class="btn btn-default btn-hikes" data-bind="click: hikingTerm">Hikes</button>
+                            <input type="text" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Filter top 10 by keywords">
                         </div>
                         <!-- List of parks, playgrounds or hikes handled by knockout.js -->
                         <ul class="scrollbar list-park" data-bind="foreach: filteredData">
