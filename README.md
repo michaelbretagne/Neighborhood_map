@@ -9,6 +9,8 @@ This is an **interactive map** of the most popular parks, playgrounds or hikes i
 ###Note:
 The app is **mobile friendly** but you will get the full experience and have access to more feature on a desktop.
 
+[Live version here!](http://michaeldonal.com/neighborhood_map/)
+
 ##Feature:
 - A weather icon and the temperature of the current neighborhood is displayed on the navbar (not available for mobile phone).
 - You can choose to display the top 10 parks, playgrounds or hikes by clicking on the appropriate button.
@@ -34,6 +36,6 @@ The app is **mobile friendly** but you will get the full experience and have acc
 ##Screenshots
 
 <p align="center">
-  <img src="ressources/desktop-v.png" width="578px" margin="10px"/>
-  <img src="ressources/mobile-v.png" width="150px" margin="10px"/>
+  <img src="ressources/desktop-v.png" width="578px" padding="5px"/>
+  <img src="ressources/mobile-v.png" width="150px" padding="5px"/>
 </p>
