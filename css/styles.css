@@ -1,617 +1,610 @@
-    /*
+/*
 Styles.css
 Neighborhood_map developped by Michael Donal
 */
-    
-    html,
-    body {
-        height: 100%;
-        margin: 0;
-    }
-    /*--------------------------Map and background-------------------------------*/
-    
-    #wrapper {
-        min-height: 100%;
-        margin-bottom: -50px;
-    }
-    
-    #map {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        right: 0;
-        z-index: 0;
-    }
-    
-    #background-error {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        right: 0;
-        z-index: 100;
-        background-image: url(../ressources/desktop-v.png);
-        background-size: contain;
-        display: none;
-    }
-    
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+
+/*--------------------------Map and background-------------------------------*/
+
+#map {
+    position: absolute;
+    height: calc(100% - 50px - 50px);
+    width: 100%;
+    z-index: 0;
+}
+
+.map-center {
+    margin-top: -80px;
+}
+
+#background-error {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    background-image: url(../resources/background.png);
+    background-size: contain;
+    display: none;
+}
+
+#map-error {
+    width: 40%;
+    text-align: center;
+    margin: 20% auto;
+    font-size: 20px;
+    padding: 10px 10px;
+    color: #fff;
+    background-color: rgba(255, 80, 80, 0.80);
+}
+
+
+/*--------------------------Navbar and container-----------------------------*/
+
+.navbar-inverse {
+    background-color: rgba(0, 0, 0, .7);
+    z-index: 2;
+    margin-bottom: 0;
+}
+
+.navbar-collapse {
+    height: 280px;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #fff;
+}
+
+
+/*--------------------------------Reusable-----------------------------------*/
+
+h4,
+p {
+    color: #505050;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+
+/*-----------------------------Inputs / Buttons------------------------------*/
+
+.input-location {
+    display: inline-block;
+}
+
+.search {
+    position: relative;
+    width: 100%;
+    padding: 0px 10px;
+    color: #aaa;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.search input {
+    box-sizing: border-box;
+    height: 32px;
+    padding-right: 30px;
+    margin: 0px 5px 5px 5px;
+    background: #fcfcfc;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-shadow: 0 0 3px #ccc, 0 10px 15px #ebebeb inset;
+}
+
+.search .fa-search {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+}
+
+.btn-filter {
+    margin: 0px 0px 5px 15px;
+}
+
+.btn-parks {
+    border: 2px solid #97ec7d;
+}
+
+.btn-playgrounds {
+    border: 2px solid #ffee5f;
+}
+
+.btn-hikes {
+    border: 2px solid #cb9d7c;
+}
+
+.btn-parks:focus {
+    background-color: #97ec7d;
+}
+
+.btn-playgrounds:focus {
+    background-color: #ffee5f;
+}
+
+.btn-hikes:focus {
+    background-color: #cb9d7c;
+}
+
+.btn:focus,
+.btn:active,
+.btn:active:focus {
+    outline: none;
+}
+
+
+/*-------------------------------Weather Icons-------------------------------*/
+
+.weather {
+    display: inline-block;
+}
+
+.weather-icon {
+    max-height: 34px;
+    font-size: 16px;
+    color: #fff;
+    padding: 2px 2px;
+    border-radius: 3px;
+    background-color: #fff;
+}
+
+.temp {
+    display: inline-block;
+    color: #fff;
+    margin: 0px 50px 0px 10px;
+}
+
+
+/*----------------------------------Scrollbar--------------------------------*/
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.scrollbar {
+    direction: rtl;
+    text-align: left;
+}
+
+
+/*---------------------------Filtered Park List------------------------------*/
+
+.list-group {
+    margin-top: 20px;
+}
+
+.list-park {
+    height: 481px;
+    overflow-y: scroll;
+}
+
+.park {
+    direction: ltr;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 0px 20px;
+    margin: 0px 5px 5px 5px;
+    border-radius: 2px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    border: 1px solid #fff;
+}
+
+.park:hover {
+    background-color: #ededed;
+}
+
+.letter {
+    float: right;
+}
+
+.yelp-list {
+    height: 25px;
+}
+
+
+/*-----------------------------Park details box------------------------------*/
+
+.park-details {
+    margin-top: 25%;
+    position: relative;
+    margin: 50% 25px;
+    padding: 15px 6px;
+    border-radius: 5px;
+}
+
+.yelp-details {
+    position: absolute;
+    height: 40px;
+    right: 0;
+    bottom: 0;
+}
+
+
+/*----------------------------Goolge Info windows----------------------------*/
+
+.iw-title {
+    font-size: 16px;
+    font-weight: 400;
+    color: #404040;
+    ;
+}
+
+
+/*---------------------------------Footer------------------------------------*/
+
+#footer {
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    bottom: 0;
+    text-align: center;
+    margin: 0 0 0 0;
+    border-radius: 3px;
+    border-color: #101010;
+    background-color: rgba(0, 0, 0, .7);
+}
+
+.social-links {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    list-style: none;
+    padding: 5px 0px 0px 0px;
+}
+
+.icons:link,
+.icons:visited {
+    font-size: 130%;
+    color: #888;
+    -webkit-transition: color 0.2s;
+    transition: color 0.2s;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.fa-github,
+.fa-twitter,
+.fa-linkedin,
+.fa-globe {
+    -webkit-transition: color 0.2s;
+    transition: color 0.2s;
+}
+
+.fa-github:hover {
+    color: #fff;
+}
+
+.fa-twitter:hover {
+    color: #55acee;
+}
+
+.fa-linkedin:hover {
+    color: #0077B5;
+}
+
+.fa-globe:hover {
+    color: rgba(123, 227, 227, 1);
+}
+
+.pw-ptag {
+    color: #888;
+    font-size: 12px;
+    margin: 0;
+}
+
+.pw-by-link {
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+}
+
+.pw-by-link:hover {
+    color: #fff;
+}
+
+
+/*--------------------------------Media query--------------------------------*/
+
+
+/*------------Extra extra small devices (iPhone 5, less than 330px)----------*/
+
+@media (max-width: 330px) {
+    /*Map error message*/
     #map-error {
-        width: 40%;
+        width: 60%;
         text-align: center;
-        margin: 20% auto;
-        font-size: 20px;
-        padding: 10px 10px;
-        color: #fff;
-        background-color: rgba(255, 80, 80, 0.80);
+        margin: 50% auto;
     }
-    /*--------------------------Navbar and container-----------------------------*/
-    
+    /*Navbar*/
     .navbar-inverse {
-        background-color: rgba(0, 0, 0, .7);
+        position: relative;
+        background-color: rgba(0, 0, 0, 0.7);
         z-index: 2;
     }
-    
-    .navbar-collapse {
-        height: 280px;
+    .navbar-collapse.in {
+        overflow-y: hidden;
+        height: 255px;
     }
-    
-    .navbar-inverse .navbar-brand {
-        color: #fff;
+    #title {
+        font-size: 13px;
     }
-    
-    .container {
+    /*Input & Btn*/
+    .input-location {
+        overflow: hidden;
+        display: block;
+    }
+    #newLocation {
+        font-size: 13px;
+        width: 74%;
+        display: inline-block;
+    }
+    #btn-submit {
+        float: right;
+        font-size: 13px;
+    }
+    .btn-filter {
+        margin: 0px 0px 5px 0px;
+    }
+    .btn-term {
+        width: 32%;
+        font-size: 13px;
+    }
+    .search input {
+        font-size: 13px;
+        margin: 0px 0px 5px 0px;
+    }
+    .search {
+        padding: 0px;
+    }
+    /*Reusable*/
+    h4 {
+        font-size: 14px;
+        margin: 8px 0px 3px 0px;
+    }
+    /*Filtered park list*/
+    #list {
+        display: none;
+    }
+    .scrollbar {
+        direction: ltr;
+    }
+    .list-group {
+        margin-top: 0;
+    }
+    .list-park {
+        font-size: 13px;
+        width: 100%;
+        display: block;
+        white-space: nowrap;
+        overflow: auto;
+    }
+    .park {
+        display: inline-block;
+        margin: 0px 1px 0px 1px;
+    }
+    .logo-ds {
+        height: 18px;
+    }
+    .logo-g {
+        height: 8px;
         margin-right: 10px;
-        max-width: 240px;
-        z-index: 1;
-        position: fixed;
-        bottom: 30px;
-        left: 20px;
     }
-    /*--------------------------------Reusable-----------------------------------*/
-    
-    h4,
-    p {
-        color: #505050;
+    .logo-y {
+        height: 20px;
+        margin-top: -8px;
     }
-    
-    a:hover {
-        text-decoration: none;
+    .yelp-link {
+        font-size: 7px;
     }
-    
-    li {
-        list-style: none;
+}
+
+
+/*-----------Extra small devices (portrait phones, less than 576px)----------*/
+
+@media (min-width: 331px) and (max-width: 567px) {
+    #map-error {
+        width: 60%;
+        text-align: center;
+        margin: 50% auto;
     }
-    
-    ul {
-        padding: 0;
+    /*Navbar*/
+    .navbar-inverse {
+        position: relative;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 2;
     }
-    /*-----------------------------Inputs / Buttons------------------------------*/
-    
+    .navbar-collapse.in {
+        overflow-y: hidden;
+        height: 260px;
+    }
+    #title {
+        font-size: 16px;
+    }
+    /*Input & btn*/
+    .input-location {
+        overflow: hidden;
+        display: block;
+    }
+    #newLocation {
+        width: 77%;
+        display: inline-block;
+    }
+    #btn-submit {
+        float: right;
+    }
+    .btn-filter {
+        margin: 0px 0px 5px 0px;
+    }
+    .btn-term {
+        width: 32.5%;
+    }
+    .search input {
+        margin: 0px 0px 5px 0px;
+    }
+    .search {
+        padding: 0px;
+    }
+    /*Reusable*/
+    h4 {
+        font-size: 17px;
+        margin: 8px 0px 3px 0px;
+    }
+    /*Park list*/
+    #list {
+        display: none;
+    }
+    .list-group {
+        margin-top: 0;
+    }
+    .list-park {
+        width: 100%;
+        display: block;
+        direction: ltr;
+        white-space: nowrap;
+        overflow: auto;
+    }
+    .park {
+        display: inline-block;
+        margin: 0px 1px 0px 1px;
+    }
+    .logo-ds {
+        height: 18px;
+    }
+    .logo-g {
+        height: 8px;
+        margin-right: 10px;
+    }
+    .logo-y {
+        height: 20px;
+        margin-top: -8px;
+    }
+    .yelp-link {
+        font-size: 7px;
+    }
+}
+
+
+/*---------------Small devices (landscape phones, 576px and up)--------------*/
+
+@media (min-width: 568px) and (max-width: 767px) {
+    /*Navbar*/
+    .navbar-inverse {
+        position: relative;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 2;
+    }
+    .navbar-collapse.in {
+        overflow-y: hidden;
+        height: 260px;
+    }
+    #title {
+        font-size: 16px;
+    }
+    /*Input & btn*/
+    .input-location {
+        overflow: hidden;
+        display: block;
+    }
+    #newLocation {
+        width: 86%;
+        display: inline-block;
+    }
+    #btn-submit {
+        float: right;
+    }
+    .btn-filter {
+        margin: 0px 0px 5px 0px;
+    }
+    .btn-term {
+        width: 32.5%;
+    }
+    .search input {
+        margin: 0px 0px 5px 0px;
+    }
+    .search {
+        padding: 0px;
+    }
+    /*Reusable  */
+    h4 {
+        font-size: 17px;
+        margin: 8px 0px 3px 0px;
+    }
+    /*Park list*/
+    #list {
+        display: none;
+    }
+    .list-group {
+        margin-top: 0;
+    }
+    .list-park {
+        width: 100%;
+        display: block;
+        direction: ltr;
+        white-space: nowrap;
+        overflow: auto;
+    }
+    .park {
+        display: inline-block;
+        margin: 0px 1px 0px 1px;
+    }
+}
+
+
+/*-------------------Medium devices (tablets, 768px and 991)------------------*/
+
+@media (min-width: 768px) and (max-width: 991px) {
+    /*Park details*/
+    .park-details {
+        margin: 0 25%;
+    }
+    /*Input*/
     .input-location {
         display: inline-block;
     }
-    
-    .search {
-        position: relative;
-        width: 100%;
-        padding: 0px 10px;
-        color: #aaa;
-        font-size: 16px;
-        display: inline-block;
-    }
-    
-    .search input {
-        box-sizing: border-box;
-        height: 32px;
-        padding-right: 30px;
-        margin: 0px 5px 5px 5px;
-        background: #fcfcfc;
-        border: 1px solid #aaa;
-        border-radius: 5px;
-        box-shadow: 0 0 3px #ccc, 0 10px 15px #ebebeb inset;
-    }
-    
-    .search .fa-search {
-        position: absolute;
-        top: 8px;
-        right: 10px;
-    }
-    
-    .btn-filter {
-        margin: 0px 0px 5px 15px;
-    }
-    
-    .btn-parks {
-        border: 2px solid #97ec7d;
-    }
-    
-    .btn-playgrounds {
-        border: 2px solid #ffee5f;
-    }
-    
-    .btn-hikes {
-        border: 2px solid #cb9d7c;
-    }
-    
-    .btn-parks:focus {
-        background-color: #97ec7d;
-    }
-    
-    .btn-playgrounds:focus {
-        background-color: #ffee5f;
-    }
-    
-    .btn-hikes:focus {
-        background-color: #cb9d7c;
-    }
-    
-    .btn:focus,
-    .btn:active,
-    .btn:active:focus {
-        outline: none;
-    }
-    /*-------------------------------Weather Icons-------------------------------*/
-    
-    .weather {
-        display: inline-block;
-    }
-    
+    /*Weather icon and temperature*/
     .weather-icon {
-        max-height: 34px;
-        font-size: 16px;
-        color: #fff;
-        padding: 2px 2px;
-        border-radius: 3px;
-        background-color: #fff;
+        max-height: 30px;
     }
-    
     .temp {
-        display: inline-block;
-        color: #fff;
-        margin: 0px 50px 0px 10px;
+        margin: 0px 10px 0px 5px;
     }
-    /*----------------------------------Scrollbar--------------------------------*/
-    
-    ::-webkit-scrollbar {
-        width: 12px;
+}
+
+
+/*----------------------Bigger devices (tablets, 991px and up)------------------*/
+
+@media (min-width: 991px) and (max-width: 1160px) {
+    /*Buttons*/
+    .btn-parks,
+    .btn-playgrounds,
+    .btn-hikes {
+        padding: 5px;
     }
-    
-    ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-    }
-    
-    .scrollbar {
-        direction: rtl;
-        text-align: left;
-    }
-    /*---------------------------Filtered Park List------------------------------*/
-    
-    .list-park {
-        height: 540px;
-        overflow-y: scroll;
-    }
-    
-    .park {
-        direction: ltr;
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 0px 20px;
-        margin: 0px 5px 5px 5px;
-        border-radius: 2px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-        border: 1px solid #fff;
-    }
-    
-    .park:hover {
-        background-color: #ededed;
-    }
-    
-    .letter {
-        float: right;
-    }
-    
-    .yelp-list {
-        height: 25px;
-    }
-    /*-----------------------------Park details box------------------------------*/
-    
-    .park-details {
-        margin-top: 25%;
-        position: relative;
-        margin: 50% 25px;
-        padding: 15px 6px;
-        border-radius: 5px;
-    }
-    
-    .yelp-details {
-        position: absolute;
-        height: 40px;
-        right: 0;
-        bottom: 0;
-    }
-    /*----------------------------Goolge Info windows----------------------------*/
-    
-    .iw-title {
-        font-size: 16px;
-        font-weight: 400;
-        color: #404040;
-        ;
-    }
-    /*---------------------------------Footer------------------------------------*/
-    
-    #footer,
-    .push {
-        height: 50px;
-    }
-    
-    #footer {
-        /*    position: absolute;*/
-        width: 100%;
-        height: 50px;
-        bottom: 0;
-        text-align: center;
-        margin: 0 0 0 0;
-        border-radius: 3px;
-        background-color: #2F3034;
-    }
-    
-    .social-links {
-        display: -webkit-inline-box;
-        display: -ms-inline-flexbox;
-        display: inline-flex;
-        list-style: none;
-        padding: 5px 0px 0px 0px;
-    }
-    
-    .icons:link,
-    .icons:visited {
-        font-size: 130%;
-        color: #888;
-        -webkit-transition: color 0.2s;
-        transition: color 0.2s;
-        margin-right: 10px;
-        margin-left: 10px;
-    }
-    
-    .fa-github,
-    .fa-twitter,
-    .fa-linkedin,
-    .fa-globe {
-        -webkit-transition: color 0.2s;
-        transition: color 0.2s;
-    }
-    
-    .fa-github:hover {
-        color: #fff;
-    }
-    
-    .fa-twitter:hover {
-        color: #55acee;
-    }
-    
-    .fa-linkedin:hover {
-        color: #0077B5;
-    }
-    
-    .fa-globe:hover {
-        color: rgba(123, 227, 227, 1);
-    }
-    
-    .powered-by {
-        background-color: #2F3034;
-        padding-bottom: 10px;
-    }
-    
-    .logo-ds {
-        float: left;
-        margin: -10px 5px 0px 0px;
-    }
-    
-    .logo-g {
-        margin-right: 24px;
-        margin-bottom: 2px;
-    }
-    
-    .logo-y {
-        margin: -10px 5px 0 0;
-        float: right;
-    }
-    
-    .yelp-link {
-        float: right;
-        font-size: 12px;
-        color: #fff;
-    }
-    
-    .yelp-link:hover {
-        color: #dddddd;
-    }
-    /*--------------------------------Media query--------------------------------*/
-    /*-------------------------Extra extra small devices-------------------------*/
-    
-    @media (max-width: 330px) {
-        /*Wrapper*/
-        #wrapper {
-            margin-bottom: -69px;
-        }
-        /*Map error message*/
-        #map {
-            margin-top: -69px;
-            top: auto;
-        }
-        /*Map error message*/
-        #map-error {
-            width: 60%;
-            text-align: center;
-            margin: 50% auto;
-        }
-        /*Navbar*/
-        .navbar-inverse {
-            position: relative;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 2;
-        }
-        .navbar-collapse.in {
-            overflow-y: hidden;
-            height: 255px;
-        }
-        #title {
-            font-size: 13px;
-        }
-        /*Input & Btn*/
-        .input-location {
-            overflow: hidden;
-            display: block;
-        }
-        #newLocation {
-            font-size: 13px;
-            width: 74%;
-            display: inline-block;
-        }
-        #btn-submit {
-            float: right;
-            font-size: 13px;
-        }
-        .btn-filter {
-            margin: 0px 0px 5px 0px;
-        }
-        .btn-term {
-            width: 32%;
-            font-size: 13px;
-        }
-        .search input {
-            font-size: 13px;
-            margin: 0px 0px 5px 0px;
-        }
-        .search {
-            padding: 0px;
-        }
-        /*Reusable*/
-        h4 {
-            font-size: 14px;
-            margin: 8px 0px 3px 0px;
-        }
-        /*Filtered park list*/
-        #list {
-            display: none;
-        }
-        .list-park {
-            font-size: 13px;
-            width: 100%;
-            display: block;
-            white-space: nowrap;
-            overflow: auto;
-        }
-        .park {
-            display: inline-block;
-            margin: 0px 1px 0px 1px;
-        }
-        .logo-ds {
-            height: 18px;
-        }
-        .logo-g {
-            height: 8px;
-            margin-right: 10px;
-        }
-        .logo-y {
-            height: 20px;
-            margin-top: -8px;
-        }
-        .yelp-link {
-            font-size: 7px;
-        }
-    }
-    /*-----------Extra small devices (portrait phones, less than 576px)----------*/
-    
-    @media (min-width: 331px) and (max-width: 567px) {
-        /*Wrapper*/
-        #wrapper {
-            margin-bottom: -69px;
-        }
-        /*Map error message*/
-        #map {
-            margin-top: -69px;
-            top: auto;
-        }
-        #map-error {
-            width: 60%;
-            text-align: center;
-            margin: 50% auto;
-        }
-        /*Navbar*/
-        .navbar-inverse {
-            position: relative;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 2;
-        }
-        .navbar-collapse.in {
-            overflow-y: hidden;
-            height: 260px;
-        }
-        #title {
-            font-size: 16px;
-        }
-        /*Input & btn*/
-        .input-location {
-            overflow: hidden;
-            display: block;
-        }
-        #newLocation {
-            width: 77%;
-            display: inline-block;
-        }
-        #btn-submit {
-            float: right;
-        }
-        .btn-filter {
-            margin: 0px 0px 5px 0px;
-        }
-        .btn-term {
-            width: 32.5%;
-        }
-        .search input {
-            margin: 0px 0px 5px 0px;
-        }
-        .search {
-            padding: 0px;
-        }
-        /*Reusable*/
-        h4 {
-            font-size: 17px;
-            margin: 8px 0px 3px 0px;
-        }
-        /*Park list*/
-        #list {
-            display: none;
-        }
-        .list-park {
-            width: 100%;
-            display: block;
-            direction: ltr;
-            white-space: nowrap;
-            overflow: auto;
-        }
-        .park {
-            display: inline-block;
-            margin: 0px 1px 0px 1px;
-        }
-        .logo-ds {
-            height: 18px;
-        }
-        .logo-g {
-            height: 8px;
-            margin-right: 10px;
-        }
-        .logo-y {
-            height: 20px;
-            margin-top: -8px;
-        }
-        .yelp-link {
-            font-size: 7px;
-        }
-    }
-    /*---------------Small devices (landscape phones, 576px and up)--------------*/
-    
-    @media (min-width: 568px) and (max-width: 767px) {
-        /*Wrapper*/
-        #wrapper {
-            margin-bottom: -69px;
-        }
-        /*Map*/
-        #map {
-            margin-top: -69px;
-            top: auto;
-        }
-        /*Navbar*/
-        .navbar-inverse {
-            position: relative;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 2;
-        }
-        .navbar-collapse.in {
-            overflow-y: hidden;
-            height: 260px;
-        }
-        #title {
-            font-size: 16px;
-        }
-        /*Input & btn*/
-        .input-location {
-            overflow: hidden;
-            display: block;
-        }
-        #newLocation {
-            width: 88%;
-            display: inline-block;
-        }
-        #btn-submit {
-            float: right;
-        }
-        .btn-filter {
-            margin: 0px 0px 5px 0px;
-        }
-        .btn-term {
-            width: 32.5%;
-        }
-        .search input {
-            margin: 0px 0px 5px 0px;
-        }
-        .search {
-            padding: 0px;
-        }
-        /*Reusable  */
-        h4 {
-            font-size: 17px;
-            margin: 8px 0px 3px 0px;
-        }
-        /*Park list*/
-        #list {
-            display: none;
-        }
-        .list-park {
-            width: 100%;
-            display: block;
-            direction: ltr;
-            white-space: nowrap;
-            overflow: auto;
-        }
-        .park {
-            display: inline-block;
-            margin: 0px 1px 0px 1px;
-        }
-    }
-    /*-------------------Medium devices (tablets, 768px and 991)------------------*/
-    
-    @media (min-width: 768px) and (max-width: 991px) {
-        /*Park details*/
-        .park-details {
-            margin: 0 25%;
-        }
-        /*Input*/
-        .input-location {
-            display: inline-block;
-        }
-        /*Weather icon and temperature*/
-        .weather-icon {
-            max-height: 30px;
-        }
-        .temp {
-            margin: 0px 10px 0px 5px;
-        }
-    }
-    /*----------------------Bigger devices (tablets, 991px and up)------------------*/
-    
-    @media (min-width: 991px) and (max-width: 1160px) {
-        /*Buttons*/
-        .btn-parks,
-        .btn-playgrounds,
-        .btn-hikes {
-            padding: 5px;
-        }
-    }
+}
