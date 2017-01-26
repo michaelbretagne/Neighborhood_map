@@ -15,122 +15,120 @@ Neighborhood_map developped by Michael Dona -->
 </head>
 
 <body>
-    <div id="wrapper">
-        <!-- Navbar -->
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavBar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <!-- Title handled by knockout.js -->
-                    <a href="http://www.michaeldonal.com" class="navbar-brand" id="title"><span data-bind="text: title"></span></a>
-                </div>
-                <!-- Collapsable navbar with bootstrap -->
-                <div class="collapse navbar-collapse" id="myNavBar">
-                    <!-- Input for new location handled by knockout.js -->
-                    <form class="navbar-form navbar-right" data-bind="submit: newLocation">
-                        <div class="form-group">
-                            <!-- Current weather icon and temperature hidden in the collapsed navbar (mobile) -->
-                            <div class="weather hidden-xs" data-bind="foreach: weathers">
-                                <img class="weather-icon" data-bind="attr: { src: icon }">
-                                <p class="temp"><span data-bind="text: temperature"></span>°F</p>
-                            </div>
-                            <!-- Input to change location handled by knockout.js -->
-                            <div class="input-location">
-                                <input type="text" class="form-control" id="newLocation" placeholder="Location, ex: Oakland" value="" data-bind="value: input">
-                                <button type="submit" class="btn btn-default" id="btn-submit" data-bind="click: newLocation">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                    <!-- Search filter and filtered list in collapsed navbar for mobile -->
-                    <div class="list-group text-center hidden-lg hidden-md hidden-sm" data-bind="visible: displayList">
-                        <!-- Parks, playgrounds and hikes filter buttons handled by knockout.js  -->
-                        <div class="btn-filter">
-                            <button type="submit" class="btn btn-default btn-term btn-parks" autofocus data-bind="click: parkTerm">Parks</button>
-                            <button type="submit" class="btn btn-default btn-term btn-playgrounds" data-bind="click: playgroundTerm">Playgrounds</button>
-                            <button type="submit" class="btn btn-default btn-term btn-hikes" data-bind="click: hikingTerm">Hikes</button>
-                        </div>
-                        <!-- Search input handled by knockout.js -->
-                        <div class="search">
-                            <span class="fa fa-search"></span>
-                            <input type="text" id="search" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
-                        </div>
-                        <!-- Filterd list handled by knockout.js -->
-                        <ul class="scrollbar list-park" data-bind="foreach: filteredData">
-                            <li class="park" data-bind=" click: $parent.placeInfoBox">
-                                <h4><span data-bind="text: name"></span></h4>
-                                <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
-                                <img class="letter" data-bind="attr: { src: iconSrc }">
-                                <br>
-                                <img data-bind="attr: { src: ratingImg }"><img class="yelp-list" src="ressources/poweredby/yelp.png">
-                                <p><span data-bind="text: rating"></span> stars / <span data-bind="text: reviewNum"></span> reviews</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- End of collapsable navbar -->
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" id="btn-hamburger" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavBar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Title handled by knockout.js -->
+                <a href="http://www.michaeldonal.com" class="navbar-brand" id="title"><span data-bind="text: title"></span></a>
             </div>
-        </nav>
-        <!-- End of navbar -->
-        <!-- Map and background in case of API error -->
-        <div id="map"></div>
-        <div id="background-error">
-            <p id="map-error">Opps! Something went wrong! We are unable to display Google Map right now. Please try again later!</p>
-        </div>
-        <!-- Container with bootstrap -->
-        <div class="container-fluid" id="list">
-            <div class="row">
-                <div class="col-md-3 pull-left">
-                    <!-- List of parks, playgrounds or hike -->
-                    <div class="list-group text-center" data-bind="visible: displayList">
-                        <!-- Filter buttons (parks, playgrounds, hikes) handled by knockout.js -->
-                        <div class="btn-filter">
-                            <button type="submit" class="btn btn-default btn-parks" autofocus data-bind="click: parkTerm">Parks</button>
-                            <button type="submit" class="btn btn-default btn-playgrounds" data-bind="click: playgroundTerm">Playgrounds</button>
-                            <button type="submit" class="btn btn-default btn-hikes" data-bind="click: hikingTerm">Hikes</button>
+            <!-- Collapsable navbar with bootstrap -->
+            <div class="collapse navbar-collapse" id="myNavBar">
+                <!-- Input for new location handled by knockout.js -->
+                <form class="navbar-form navbar-right" data-bind="submit: newLocation">
+                    <div class="form-group">
+                        <!-- Current weather icon and temperature hidden in the collapsed navbar (mobile) -->
+                        <div class="weather hidden-xs" id="weather-display" data-bind="foreach: weathers">
+                            <img class="weather-icon" data-bind="attr: { src: icon }" alt="Weather icon">
+                            <p class="temp"><span data-bind="text: temperature"></span>°F</p>
                         </div>
-                        <!-- Search filter handled by knockout.js -->
-                        <div class="search ">
-                            <span class="fa fa-search"></span>
-                            <input type="text" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Filter top 10 by keywords">
+                        <!-- Input to change location handled by knockout.js -->
+                        <div class="input-location">
+                            <input type="text" class="form-control" id="newLocation" placeholder="Location, ex: Oakland" value="" data-bind="value: input">
+                            <button type="submit" class="btn btn-default" id="btn-submit" data-bind="click: newLocation">Submit</button>
                         </div>
-                        <!-- List of parks, playgrounds or hikes handled by knockout.js -->
-                        <ul class="scrollbar list-park" data-bind="foreach: filteredData">
-                            <li class="park" data-bind=" click: $parent.placeInfoBox">
-                                <h4><span data-bind="text: name"></span></h4>
-                                <a class="link" target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
-                                <img class="letter" data-bind="attr: { src: iconSrc }">
-                                <br>
-                                <img data-bind="attr: { src: ratingImg }"><img class="yelp-list" src="ressources/poweredby/yelp.png">
-                                <p><span data-bind="text: rating"></span> stars / <span data-bind="text: reviewNum"></span> reviews</p>
-                            </li>
-                        </ul>
                     </div>
+                </form>
+                <!-- Search filter and filtered list in collapsed navbar for mobile -->
+                <div class="list-group text-center hidden-lg hidden-md hidden-sm" data-bind="visible: displayList">
+                    <!-- Parks, playgrounds and hikes filter buttons handled by knockout.js  -->
+                    <div class="btn-filter">
+                        <button type="submit" class="btn btn-default btn-term btn-parks" autofocus data-bind="click: parkTerm">Parks</button>
+                        <button type="submit" class="btn btn-default btn-term btn-playgrounds" data-bind="click: playgroundTerm">Playgrounds</button>
+                        <button type="submit" class="btn btn-default btn-term btn-hikes" data-bind="click: hikingTerm">Hikes</button>
+                    </div>
+                    <!-- Search input handled by knockout.js -->
+                    <div class="search">
+                        <span class="fa fa-search"></span>
+                        <input type="text" id="search" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Search in this area">
+                    </div>
+                    <!-- Filterd list handled by knockout.js -->
+                    <ul class="scrollbar list-park" data-bind="foreach: filteredData">
+                        <li class="park" data-bind=" click: $parent.placeInfoBox">
+                            <h4><span data-bind="text: name"></span></h4>
+                            <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
+                            <img class="letter" data-bind="attr: { src: iconSrc }" alt="Marker">
+                            <br>
+                            <img data-bind="attr: { src: ratingImg }" alt="5 stars"><img class="yelp-list" src="resources/poweredby/yelp.png" alt="by Yelp">
+                            <p><span data-bind="text: rating"></span> stars / <span data-bind="text: reviewNum"></span> reviews</p>
+                        </li>
+                    </ul>
                 </div>
-                <!-- End of the list -->
-                <!-- Details (comments) about a selected park, playground or hike handled by knockout.js-->
-                <div class="col-md-4 pull-right text-center" id="details" data-bind="visible: displayDetails">
-                    <!-- Yelp link handled by knockout.js -->
-                    <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">
-                        <!-- Yelp comment -->
-                        <div class="park-details park">
-                            <h4><span data-bind="text: park"></span></h4>
-                            <p class="text"><span data-bind="text: text"></span></p>
-                            <img class="image" data-bind="attr: { src: image }">
-                            <img class="yelp-details" src="ressources/poweredby/yelp-outline.png">
-                        </div>
-                    </a>
-                </div>
-                <!-- End of details (comment) box -->
             </div>
+            <!-- End of collapsable navbar -->
         </div>
-        <!-- End of container bootstrap -->
+    </nav>
+    <!-- End of navbar -->
+    <!-- Map and background in case of API error -->
+    <div id="map"></div>
+    <div id="background-error">
+        <p id="map-error">Oops! Something went wrong! We are unable to display Google Map right now. Please try again later!</p>
     </div>
-    <div class="push"></div>
+    <!-- Container with bootstrap -->
+    <div class="container-fluid" id="list">
+        <div class="row">
+            <div class="col-md-3 pull-left">
+                <!-- List of parks, playgrounds or hike -->
+                <div class="list-group text-center" data-bind="visible: displayList">
+                    <!-- Filter buttons (parks, playgrounds, hikes) handled by knockout.js -->
+                    <div class="btn-filter">
+                        <button type="submit" class="btn btn-default btn-parks" autofocus data-bind="click: parkTerm">Parks</button>
+                        <button type="submit" class="btn btn-default btn-playgrounds" data-bind="click: playgroundTerm">Playgrounds</button>
+                        <button type="submit" class="btn btn-default btn-hikes" data-bind="click: hikingTerm">Hikes</button>
+                    </div>
+                    <!-- Search filter handled by knockout.js -->
+                    <div class="search ">
+                        <span class="fa fa-search"></span>
+                        <input type="text" class="form-control search-input" data-bind="textInput: query" autocomplete="off" placeholder="Filter top 10 by keywords">
+                    </div>
+                    <!-- List of parks, playgrounds or hikes handled by knockout.js -->
+                    <ul class="scrollbar list-park" data-bind="foreach: filteredData">
+                        <li class="park" data-bind=" click: $parent.placeInfoBox">
+                            <h4><span data-bind="text: name"></span></h4>
+                            <a class="link" target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">www.yelp.com</a>
+                            <img class="letter" data-bind="attr: { src: iconSrc }" alt="Marker">
+                            <br>
+                            <img data-bind="attr: { src: ratingImg }"><img class="yelp-list" src="resources/poweredby/yelp.png" alt="yelp rating">
+                            <p><span data-bind="text: rating"></span> stars / <span data-bind="text: reviewNum"></span> reviews</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- End of the list -->
+            <!-- Details (comments) about a selected park, playground or hike handled by knockout.js-->
+            <div class="col-md-4 pull-right text-center" id="details" data-bind="visible: displayDetails, foreach: detailsInfo">
+                <!-- Yelp link handled by knockout.js -->
+                <a target="_blank" data-bind="attr: {href: url}, click: function() { return true;}, clickBubble: false">
+                    <!-- Yelp comment -->
+                    <div class="park-details park">
+                        <h4><span data-bind="text: name"></span></h4>
+                        <p class="text"><span data-bind="text: text"></span></p>
+                        <img class="image" data-bind="attr: { src: image }" alt="review image">
+                        <img class="yelp-details" src="resources/poweredby/yelp-outline.png" alt="by yelp">
+                    </div>
+                </a>
+            </div>
+            <!-- End of details (comment) box -->
+        </div>
+    </div>
+    <!-- End of container bootstrap -->
     <!-- Footer -->
     <footer id="footer">
         <!-- Personal Social link -->
@@ -141,11 +139,11 @@ Neighborhood_map developped by Michael Dona -->
             <li><a class="icons" href="http://www.michaeldonal.com"><i class="fa fa-globe" aria-hidden="true"></i></a></li>
         </ul>
         <!-- References of APIs owners -->
-        <div class="powered-by">
-            <a href="https://darksky.net/dev/"><img class="logo-ds" src="ressources/poweredby/darksky-n.png"></a>
-            <a href="https://developers.google.com/maps/"><img class="logo-g" src="ressources/poweredby/google-md.png"></a>
-            <a class="yelp-link" href="https://www.yelp.com/developers/">Powered by<img class="logo-y" src="ressources/poweredby/yelp-outline.png"></a>
-        </div>
+        <p class="pw-ptag">Powered by
+            <a class="pw-by-link" href="https://darksky.net/dev/">Dark Sky</a>,
+            <a class="pw-by-link" href="https://developers.google.com/maps/">Google</a> and
+            <a class="pw-by-link" href="https://www.yelp.com/developers/">Yelp</a>
+        </p>
     </footer>
     <!-- End of footer -->
 
@@ -163,8 +161,14 @@ Neighborhood_map developped by Michael Dona -->
     <!-- My own javscript code -->
     <script type="text/javascript" src="js/script.js"></script>
     <!-- Google map api -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAATegb_vfnrK5i8ovNBjf9htL88PNMA00&callback=googleSuccess" onerror="googleError()" async defer></script>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAATegb_vfnrK5i8ovNBjf9htL88PNMA00&callback=initMap" onerror="googleError()" async defer></script>
+    <!-- Hide footer when navbar is collapsed and adjust map position -->
+    <script>
+        $("#btn-hamburger").on("click", function () {
+            $("#footer").toggle();
+            $("#map").toggleClass("map-center");
+        });
+    </script>
 </body>
 
 </html>
