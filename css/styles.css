@@ -202,7 +202,7 @@ ul {
 }
 
 .list-park {
-    height: 481px;
+    max-height: 65.5vh;
     overflow-y: scroll;
 }
 
@@ -232,9 +232,8 @@ ul {
 /*-----------------------------Park details box------------------------------*/
 
 .park-details {
-    margin-top: 25%;
     position: relative;
-    margin: 50% 25px;
+    margin: 35% 25px;
     padding: 15px 6px;
     border-radius: 5px;
 }
@@ -583,6 +582,9 @@ ul {
     /*Park details*/
     .park-details {
         margin: 0 25%;
+    }
+    .list-park {
+        max-height: 53vh;
     }
     /*Input*/
     .input-location {
