@@ -60,6 +60,7 @@ function initMap() {
     // Object of the place with marker and an info windows
     class PlaceObj {
         constructor(data) {
+            this.id = data.id || 'n/a';
             this.name = data.name || 'n/a';
             this.street = data.street || 'n/a';
             this.city = data.city || 'n/a';
@@ -69,8 +70,11 @@ function initMap() {
             this.rating = data.rating || 'n/a';
             this.ratingImg = data.ratingImg || 'n/a';
             this.reviewNum = data.reviewNum || 'n/a';
-            this.image = data.image || 'n/a';
+            
+            this.userImage = data.userImage || 'n/a';
+            this.userName = data.userName || 'n/a';
             this.text = data.text || 'n/a';
+
             this.term = data.term || 'n/a';
             this.letter = data.letter || 'n/a';
 
@@ -161,7 +165,6 @@ function initMap() {
             }
         }
     }
-
 
     // View Model
     function ViewModel() {
@@ -255,13 +258,15 @@ function initMap() {
             // Center map on marker click
             map.setCenter(clickedPark.marker.getPosition());
 
+            // yelpDetails(clickedPark.id);
+
             // Empty detailsInfo observable array
             self.detailsInfo([]);
             // Pass data into observable array
             self.detailsInfo.push({
                 name: clickedPark.name,
                 text: clickedPark.text,
-                image: clickedPark.image,
+                image: clickedPark.userImage,
                 url: clickedPark.url
             });
 
@@ -271,91 +276,69 @@ function initMap() {
 
         // Gets data from yelp API
         function yelpInfo(term, location) {
-            // Uses OAuth 1.0a signature generator
-            // Bower package installed at https://github.com/bettiolo/oauth-signature-js
 
-            // Use the GET method for the request
-            const httpMethod = 'GET';
+            var cors_anywhere_url = 'https://cors-anywhere.herokuapp.com/';
+            var yelp_url = `${cors_anywhere_url}https://api.yelp.com/v3/businesses/search?limit=10&term=${term}&location=${location}`;
+            $.ajax({
+                url: yelp_url,
+                method: "GET",
+                headers: {
+                    "authorization": "Bearer [YELP API AUTHORIZATION TOKEN]",
+                    "cache-control": "no-cache",
+                    "postman-token": "855372a6-f97e-ea80-01e5-d526c86b54b2"
+                },
+            }).done(function(response){
 
-            // Yelp API request url
-            const yelpURL = 'http://api.yelp.com/v2/search/';
+                // Previous markers not visible and empty observables
+                self.placesList().forEach(el => el.marker.setVisible(false));
+                self.displayDetails(false);
+                self.placesList([]);
+                self.weathers([]);
+                closeInfoWindow();
 
-            // Return a nonce
-            let nonce = function() {
-                return (Math.floor(Math.random() * 1e12).toString());
-            };
+                // Sets the center of the map
+                latMap = response.region.center.latitude;
+                longMap = response.region.center.longitude;
+                map.setCenter({
+                    lat: latMap,
+                    lng: longMap
+                });
+                // Declares the active location
+                self.activeLocation(location);
 
-            // Sets parameters for the authentication and the search
-            let parameters = {
-                oauth_consumer_key: 'DgdYz5Ok9hKgaDDC0_-LRQ',
-                oauth_token: 'PWjDu-crzWrIEN7b2kQ3ly-em5-H5g3x',
-                oauth_nonce: nonce(),
-                oauth_timestamp: Math.floor(Date.now() / 1000),
-                oauth_signature_method: 'HMAC-SHA1',
-                oauth_version: '1.0',
-                callback: 'cb',
-                term: term,
-                location: location,
-                limit: 10
-            };
+                // Displays the weather
+                weatherInfo(latMap, longMap);
 
-            // Generates the OAuth signature
-            let EncodedSignature = oauthSignature.generate(httpMethod, yelpURL,
-                parameters, 'vP92U9WyYFBwbOnCN_bkL9d1T3M',
-                '4ZSzDmfHZF7fjFG-6uom9-rCZqs');
+                // Possible assignement letters
+                const letterArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
-            // Adds signature to list of parameters
-            parameters.oauth_signature = EncodedSignature;
+                // Populates the PlaceObj with the relevant data
+                const yelpData = response.businesses;
+                
+                for (i = 0; i < yelpData.length; i++) {
+                    let id = yelpData[i].id;
+                    let parkName = yelpData[i].name;
+                    let street = yelpData[i].location.address1;
+                    let city = yelpData[i].location.city;
+                    let markerLat = yelpData[i].coordinates.latitude;
+                    let markerLong = yelpData[i].coordinates.longitude;
+                    let url = yelpData[i].url;
+                    let rating = yelpData[i].rating;
+                    let ratingImg = `./resources/ratingStars/small_${rating}.png`;
+                    let reviewNum = yelpData[i].review_count;
 
-            // Sets up the ajax settings
-            let ajaxSettings = {
-                url: yelpURL,
-                data: parameters,
-                cache: true,
-                dataType: 'jsonp',
-                success: function(response) {
-                    // Previous markers not visible and empty observables
-                    self.placesList().forEach(el => el.marker.setVisible(false));
-                    self.displayDetails(false);
-                    self.placesList([]);
-                    self.weathers([]);
-                    closeInfoWindow();
+                    // Assigns letter for each elements
+                    let letter = letterArr.shift();
 
-                    // Sets the center of the map
-                    latMap = response.region.center.latitude;
-                    longMap = response.region.center.longitude;
-                    map.setCenter({
-                        lat: latMap,
-                        lng: longMap
-                    });
-                    // Declares the active location
-                    self.activeLocation(location);
+                    // Get reviews from yelp api for each business
+                    yelpDetails(id, function(callback) {
+                        let reviews = callback;
+                        
+                        console.log(reviews[0].userImage);
 
-                    // Displays the weather
-                    weatherInfo(latMap, longMap);
-
-                    // Possible assignement letters
-                    const letterArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-
-                    // Populates the PlaceObj with the relevant data
-                    const yelpData = response.businesses;
-                    for (i = 0; i < yelpData.length; i++) {
-                        let parkName = yelpData[i].name;
-                        let street = yelpData[i].location.address[0];
-                        let city = yelpData[i].location.city;
-                        let markerLat = yelpData[i].location.coordinate.latitude;
-                        let markerLong = yelpData[i].location.coordinate.longitude;
-                        let url = yelpData[i].url;
-                        let rating = yelpData[i].rating;
-                        let ratingImg = yelpData[i].rating_img_url_small;
-                        let reviewNum = yelpData[i].review_count;
-                        let image = yelpData[i].snippet_image_url;
-                        let text = yelpData[i].snippet_text;
-
-                        // Assigns letter for each elements
-                        let letter = letterArr.shift();
-
+                        // Push object data into an observable array
                         self.placesList.push(new PlaceObj({
+                            id: id,
                             name: parkName,
                             street: street,
                             city: city,
@@ -365,26 +348,60 @@ function initMap() {
                             rating: rating,
                             ratingImg: ratingImg,
                             reviewNum: reviewNum,
-                            image: image,
-                            text: text,
+                            userName: reviews[0].userName,
+                            userImage: reviews[0].userImage,
+                            text: reviews[0].text,
                             term: term,
                             letter: letter
                         }));
 
-                        // Sets data to a observable for the title computed observable
-                        self.city(city);
-                        self.terms(term);
-                    }
-                },
-                error: function(jqXHR, exception) {
-                    // Sets a screenshot as a background with an error message
-                    document.getElementById('background-error').style.display = 'block';
-                    console.log(`Sorry, something went wrong with Yelp API. ${exception}: ${jqXHR.status}`);
+                    });
+                    // Sets data to a observable for the title computed observable
+                    self.city(city);
+                    self.terms(term);
                 }
-            };
-            // Sends off the ajax request to Yelp
-            $.ajax(ajaxSettings);
+            }).fail(function(error){
+                console.log("An error occured in getting Yelp data!");
+            });
         }
+
+            // Get yelp data by id
+        function yelpDetails(businessId, callback) {
+            var cors_anywhere_url = 'https://cors-anywhere.herokuapp.com/';
+            var yelp_url = `${cors_anywhere_url}https://api.yelp.com/v3/businesses/${businessId}/reviews`;
+            $.ajax({
+                url: yelp_url,
+                method: "GET",
+                headers: {
+                    "authorization": "Bearer iV2UxDakAzm43zMLyq_wPYJcwlOEbBkh4qBFf7nhIBFK1qlwaGh03naAecibIzIWcwzZKNcm4LE2UMCCcX-hEoNlLeAmH9-yrHoa7066MgC7HfDxA-NFEnFenO38WXYx",
+                    "cache-control": "no-cache",
+                    "postman-token": "855372a6-f97e-ea80-01e5-d526c86b54b2"
+                }
+            }).done(function(response){
+                const yelpData = response.reviews;
+                var data = [];
+                
+                for (i = 0; i < yelpData.length; i++) {
+                    let userImage = yelpData[i].user.image_url;
+                    let userName = yelpData[i].user.name;
+                    let text = yelpData[i].text;
+
+                    var obj = {
+                        userImage,
+                        userName,
+                        text
+                    }
+
+                    data.push(obj);
+                }
+                // Return data
+                callback(data);
+
+            }).fail(function(error){
+                console.log("An error occured in getting Yelp data!");
+            });
+        }
+        
 
         // Gets the current waether from Dark Sky API (https://darksky.net)
         function weatherInfo(latitude, longitude) {
